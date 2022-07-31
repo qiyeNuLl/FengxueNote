@@ -1,0 +1,5 @@
+sum = 0
+for i in range(100,10001,2):
+    sum = sum + i
+
+print(sum)

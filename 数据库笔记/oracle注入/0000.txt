@@ -1,0 +1,100 @@
+cmd登陆
+
+1.sqlplus
+2.win+r > sqlplus admin/admin
+
+sql格式化
+SELECT * FROM emp;  //查表
+SET LINESIZE 300;  //设置每行显示数据长度
+SET PAGESIZE 30;   //设置每个页面数据行数
+窗口-属性
+
+login.sql（自动脚本）
+
+
+SELECT * FROM tab;  //查看当前用户所有数据表
+
+COL tname FOR A10;   //显示10列
+select * from tab;
+
+SHOW USER;    //查看用户
+
+CONN admin/passwd    //切换用户
+CONN sys/change_on_install as sysdba;   /切换sys用户
+
+SELECT * FROM scott.tmp;
+//查询scott用户的tmp表
+
+ED demo;
+//打开或创建demo.sql文件
+
+@demo；
+//执行文件
+
+调用本机命令
+HOST echo "demo";  //写出demo
+HOST cls; 或 clear scr； //清屏
+
+简单查询(投影查询)
+SELECT DISTINCT 列名，列名... from 表;
+
+同步数据--数据冗余--数据重复
+DISTINCT 防止数据冗余（列名都存在数据冗余时才生效）
+
+
+四则运算
+薪资结构(入职必问)
+
+定义别名
+SELECT empno,...,sal*12 income FROM emp;
+例：SELECT empno,ename,job,sal*15+(200+400+100)*12+500 income FROM emp;
+
+设置常量
+SELECT 'tel',empno,...,income FROM emp;
+连接用法
+SELECT '编号：'||empno||',年薪：'||income FROM emp;
+
+限定查询
+SELECT DISTINCT 列名，列名... 
+FROM 表
+WHERE 过滤条件;
+例：
+SELECT * 
+FROM emp
+WHERE sal > 1500;
+
+不等于 ： <> 或 !=
+逻辑：NOT>AND>OR
+范围运算符：BETWEEN ...AND
+
+
+空判断
+IS NULL
+IS NOT NULL 等价于 NOT IS NULL
+
+谓词运算符
+WHERE 字段 IN (7499，7521，7654，9999)
+
+模糊查询
+SELECT *
+FROM emp
+WHERE sal LIKE '%9%';
+
+查询排序  asc升，desc降
+SELECT *
+FROM emp
+ORDER BY sal desc, hiredate ;//工资高倒低  
+
+SELECT empno,ename,job,sal*12 income
+FROM emp
+ORDER BY income;
+
+ROUND(数字 [，小数位]) 实现数据的四舍五入，可设置保留的小数位
+TAUNC(数字 [，小数位]) 实现数字的截取，即不进位
+MOD( 列 | 数字，列 | 数字 ) 取模（计算余数）
+
+ADD_MONTHS( 列 | 日期，月数 ) 在指定的日期上增加若干个月之后的日期
+MONTHS_BETWEEN( 列 | 日期，列 | 日期 )
+返回两个日期之间的月数（这个肯定是准确的）
+LAST_DAY( 列 | 日期 ) 取得指定日期所在月的最后一天
+NEXT_DAY( 列 | 日期，星期X ) 返回下一个指定的一周对应的日期

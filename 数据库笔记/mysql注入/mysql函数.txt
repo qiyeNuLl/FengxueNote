@@ -1,0 +1,12 @@
+调用形式：select 函数；
+例：select user();
+
+system_user()        系统用户名
+user()               用户名
+current_user         当前用户名
+session_user()       连接数据库的用户名
+database()           数据库名
+version()            mysql数据库版本
+@@datadir            读取数据库路径
+@@basedir            mysql安装路径
+@@version_compile_os 操作系统

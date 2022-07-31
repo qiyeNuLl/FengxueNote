@@ -1,0 +1,39 @@
+专业术语
+
+1.渗透攻击( exploit )
+
+  利用系统、程序，或服务的漏洞进行攻击的一个过程
+
+2.攻击载荷( payload )
+  
+  在目标系统上执行的一段攻击代码，该代码具有反弹连接
+
+3.shellcode
+  
+  机器指令，成功执行后会返回一个shell
+
+4.模块 ( module )
+
+  Metasploit框架中所使用的一段软件代码组件
+
+5.监听器 ( listener )
+
+  用来等待接入网络连接的组件
+
+启动设置
+
+service postgresql start 启用端口数据库
+msfconsole 启动msf
+db_status 查看数据库连接状态
+workspace -a test 创建一个名为test的工作台
+workspace -d 选项
+workspace test 进入test工作台
+
+nmap使用
+db_nmap -sS ip地址
+db_export 1.xml 导出扫描结果
+db_import 1.xml 导入扫描结果
+db_services 查看扫描结果
+hosts 查看扫描结果
+
+

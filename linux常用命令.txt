@@ -1,0 +1,55 @@
+对so库的缓存
+vim /etc/ld.so.conf
+增加/usr/local/lib
+运行/sbin/ldconfig -v
+
+grub2配置文件
+vim /boot/grub2/grub.cfg
+
+临时关闭防火墙和SELinux
+systemctl stop firewalld.service
+setenforce 0
+
+永久关闭防火墙和SELinux
+systemctl disable firewalld.service
+sed -i 's/SELINUX=enforcing/SELINUX=disabled/' /etc/selinux/config
+
+
+
+网卡配置
+vim /etc/sysconfig/network-scripts/ifcfg-eno16777736
+systemctl restart network.service
+service network restart
+
+dhcp配置
+vim /etc/dhcp/dhcpd.conf
+systemctl restart dhcpd.service
+
+DNS配置
+主配置
+vim /etc/named.conf
+正反向解析
+vim /etc/named.rfc1912.zones
+获取DNS配置
+vim /etc/resolv.conf
+
+
+
+Zabbix配置
+配置数据库
+vim  /etc/zabbix/zabbix_server.conf
+
+apache
+killall httpd
+/usr/local/apache/bin/apachectl
+netstat -luntp | grep httpd
+lsof -i :80
+
+网络配置
+vim /usr/local/apache/conf/httpd.conf
+vim /usr/local/apache/conf/extra/httpd-vhosts.conf
+
+
+mysql
+/etc/init.d/mysql start
+

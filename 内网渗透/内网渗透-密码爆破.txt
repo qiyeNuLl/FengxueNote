@@ -1,0 +1,10 @@
+服务
+smb
+telnet
+ftp
+3389
+mssql
+mysql
+
+爆破工具
+hydra

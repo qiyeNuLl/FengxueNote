@@ -1,0 +1,3 @@
+apt-get install apache2
+cd /var/www/html
+service apache2 start

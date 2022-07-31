@@ -1,0 +1,22 @@
+#include <sys/time.h>
+#include <time.h>
+相同点： 二者都是与日期时间相关的 头文件。
+
+不同点：
+time.h 是c99的，也就是c的库函数。
+sys/time.h是linux系统的。
+
+
+#include <sys/types.h>
+基本系统数据类型
+
+#include <stdlib.h>
+stdlib 头文件即standard library标准库头文件，
+stdlib 头文件里包含了C、C++语言的最常用的系统函数，
+该文件包含了的C语言标准库函数的定义。
+
+#include <unistd.h>
+由字面意思，unistd.h是unix std的意思，
+是POSIX标准定义的unix类系统定义符号常量的头文件，
+包含了许多UNIX系统服务的函数原型，
+例如read函数、write函数和getpid函数。

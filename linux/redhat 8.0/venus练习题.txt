@@ -1,0 +1,173 @@
+在 venus.domain250.example.com 上执行以下任务。
+1、设置 root 密码
+    将 venus 的 root 密码设置为 flectrag 。您需要获得系统访问权限才能进行此操作。
+ 解：
+     1） console口登录venus，按ctrl+alt+del 重启venus
+     2）在启动菜单按 e 键，修改系统启动内核参数，
+     定位到Linux开头一行，在末尾加入一个空格，再输入 rd.break ， ctrl+x重启 
+     Swith_root:/#
+
+   3）重启系统进入单用户维护模式，原系统只读挂载到 /sysroot目录，改密码需要读写挂载。
+    swith_root:/# mount -o remount,rw  /sysroot       //重新读写挂载真实系统
+  4）切换到真实系统，修改root密码
+     swith_root:/# chroot  /sysroot                        //切换到真实系统
+     sh-4.4# echo flectrag | passwd --stdin  root            //改root密码
+    sh-4.4# touch  /.autorelabel                            //selinux初始化
+    sh-4.4# exit
+    swith_root:/# exit           //重启
+
+    5）验证root密码
+
+
+ 2、配置您 的系统以使用默认存储库
+        YUM 存储库已可以从 http://content/rhel8.0/x86_64/dvd/BaseOS 和 http://content/rhel8.0/x86_64/dvd/AppStream 使用配置您的系统，以将这些位置用作默认存储库。
+解：
+[root@venus ~]# cd /etc/yum.repos.d/
+[root@venus yum.repos.d]# ls
+[root@venus yum.repos.d]# vi base.repo
+[base]
+name=base
+baseurl=http://content/rhel8.0/x86_64/dvd/BaseOS
+enabled=1
+gpgcheck=0
+
+[root@venus yum.repos.d]# vi app.repo
+[app]
+name=app
+baseurl=http://content/rhel8.0/x86_64/dvd/AppStream
+enabled=1
+gpgcheck=0
+
+[root@venus yum.repos.d]# yum -y install vim
+
+
+3、设置逻辑卷大小
+    将逻辑卷 vo 及其文件系统的大小调整到 230 MiB。确保文件系统内容保持不变。注：分区大小很少与请求的大小完全相同，因此可以接受范围为 217 MiB 到 243 MiB 的大小。
+[root@venus ~]# df -hT
+/dev/mapper/myvol-vo ext4      175M  1.6M  160M   1% /reports
+
+[root@venus ~]# lvs
+  LV   VG     Attr       LSize   Pool Origin Data%  Meta%  Move Log Cpy%Sync Convert
+  vo   myvol  -wi-ao---- 184.00m                                                    
+ 
+[root@venus ~]# vgs
+  VG     #PV #LV #SN Attr   VSize   VFree  
+  myvol    1   1   0 wz--n- 484.00m 300.00m
+  vgroup   1   1   0 wz--n-   1.17g 688.00m
+
+[root@venus ~]# lvextend -L 230M /dev/mapper/myvol-vo
+ 
+[root@venus ~]# lvs
+  LV   VG     Attr       LSize   Pool Origin Data%  Meta%  Move Log Cpy%Sync Convert
+  vo   myvol  -wi-ao---- 232.00m         
+ 
+[root@venus ~]# resize2fs /dev/mapper/myvol-vo
+[root@venus ~]# df -hT
+
+
+ 4、添加交换分区
+    向您的系统添加一个额外的交换分区 756MiB 。交换分区应在系统启动时自动挂载。不要删除或以任何方式改动系统上的任何现有交换分区。
+[root@venus ~]# lsblk 
+[root@venus ~]# free -h
+ [root@venus ~]# fdisk /dev/vdb
+Command (m for help): n
+Partition number (2-128, default 2): 
+First sector (1000001-10485726, default 1001472): 
+Last sector, +sectors or +size{K,M,G,T,P} (1001472-10485726, default 10485726): +756M
+
+[root@venus ~]# mkswap /dev/vdb2
+[root@venus ~]# swapon /dev/vdb2
+[root@venus ~]# vim /etc/fstab 
+UUID=d8bdc616-6ce3-4c28-86bb-a83f82a55c9f swap swap defaults 0 0
+
+[root@venus ~]# free -h
+
+
+5、创建逻辑卷
+    根据如下要求，创建新的逻辑卷：
+        逻辑卷取名为 qa ，属于 qagroup 卷组，大小为 60 个扩展块
+        qagroup 卷组中逻辑卷的扩展块大小应当为 16 MiB
+        使用 ext3 文件系统格式化新逻辑卷。该逻辑卷应在系统启动时自动挂载到 /mnt/qa 下
+[root@venus ~]# fdisk /dev/vdb
+Command (m for help): n
+Partition number (3-128, default 3): 
+First sector (2549760-10485726, default 2549760): 
+Last sector, +sectors or +size{K,M,G,T,P} (2549760-10485726, default 10485726): +1G
+Command (m for help): p
+Command (m for help): w
+
+[root@venus ~]# pvcreate /dev/vdb3
+[root@venus ~]# vgcreate qagroup /dev/vdb3 -s 16M
+[root@venus ~]# lvcreate -n qa -l 60 qagroup
+[root@venus ~]# lvs
+  LV   VG      Attr       LSize   Pool Origin Data%  Meta%  Move Log Cpy%Sync Convert
+  vo   myvol   -wi-ao---- 232.00m                                                    
+  qa   qagroup -wi-a----- 960.00m                                                    
+  swap vgroup  -wi-ao---- 512.00m    
+[root@venus ~]# mkfs.ext3 /dev/qagroup/qa 
+                                                
+[root@venus ~]# mkdir /mnt/qa
+[root@venus ~]# blkid
+/dev/mapper/qagroup-qa: UUID="7079eb6b-95e6-4e6d-b71d-83551a0e97a5" SEC_TYPE="ext2" TYPE="ext3"
+
+[root@venus ~]# vim /etc/fstab
+UUID=7079eb6b-95e6-4e6d-b71d-83551a0e97a5 /mnt/qa ext3 defaults 0 0
+
+[root@venus ~]# vim /etc/fstab 
+[root@venus ~]# mount -a
+[root@venus ~]# df -h
+/dev/mapper/qagroup-qa  929M  1.2M  880M   1% /mnt/qa
+ 
+
+6、创建 VDO 卷
+    根据如下要求，创建新的 VDO 卷：
+        使用未分区的磁盘
+        该卷的名称为 vdough
+        该卷的逻辑大小为 50G
+        该卷使用 xfs 文件系统格式化
+        该卷（在系统启动时）挂载到 /vbread 下
+[root@venus ~]# yum search vdo
+ vdo.x86_64 : Management tools for Virtual Data Optimizer
+kmod-kvdo.x86_64 : Kernel Modules for Virtual Data Optimizer
+
+[root@venus ~]# yum -y install vdo kmod-kvdo
+
+ [root@venus ~]# man vdo|grep create
+      # vdo create --name=vdo0 --device=/dev/sdb1 --vdoLogicalSize=10T
+[root@venus ~]# vdo create --name=vdough --device=/dev/vdc --vdoLogicalSize=50G
+[root@venus ~]# mkfs.xfs -K /dev/mapper/vdough
+[root@venus ~]# mkdir /vbread
+[root@venus ~]# vim /etc/fstab
+/dev/mapper/vdough /vbread xfs defaults,_netdev 0 0
+
+注意：
+如果系统启进入紧急模式，解决办法（/etc/fstab错误）
+Give root password for maintenance
+(or press Control-D to continue):
+解决方法：
+    1）输入root密码输入维护模式
+      [root@venus ~]# 
+     2）修改/etc/fstab
+        [root@venus ~]# vi /etc/fstab
+          在我们自己编写行前面加#
+            [root@venus ~]# reboot
+     3) 在正常启动后，改正/etc/fstab文件错误
+        
+
+ 7、配置系统调优
+    为您的系统选择建议的 tuned 配置集并将它设为默认设置。
+[root@venus ~]# yum -y install tuned
+[root@venus ~]# systemctl start tuned
+[root@venus ~]# systemctl enable tuned
+
+[root@venus ~]# tuned-adm 
+active     list       off        profile    recommend  verify   
+  
+[root@venus ~]# tuned-adm active 
+Current active profile: throughput-performance
+[root@venus ~]# tuned-adm recommend 
+  virtual-guest
+[root@venus ~]# tuned-adm profile virtual-guest
+[root@venus ~]# tuned-adm active 
+  Current active profile: virtual-guest
+[root@venus ~]# 

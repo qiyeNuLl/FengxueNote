@@ -1,0 +1,6 @@
+前提：
+足够权限，写入木马的文件有写入权限，知道网站绝对路径
+
+对于mssql注入漏洞可以通过log备份、差异备份拿webshell
+对于mysql注入漏洞可以通过into file 函数将一句话木马写入，拿webshell
+利用phpmyadmin将木马导出 ，拿webshell

@@ -1,0 +1,25 @@
+import base64
+# ROT13字符变换，要变回去再调用一次即可。
+def rot13(s, OffSet=13):
+    def encodeCh(ch):
+        f = lambda x: chr((ord(ch) - x + OffSet) % 26 + x)
+        return f(97) if ch.islower() else (f(65) if ch.isupper() else ch)
+ 
+    return ''.join(encodeCh(c) for c in s)
+ 
+ 
+def main():
+    miwen = 'a1zLbgQsCESEIqRLwuQAyMwLyq2L5VwBxqGA3RQAyumZ0tmMvSGM2ZwB4tws'
+    miwen = rot13(miwen)
+    miwen = miwen[::-1]
+    miwen = base64.b64decode(miwen)
+    miwen = str(miwen,'utf-8')
+    print(miwen)
+    mingwen = ""
+    for _0 in range(0, len(miwen)):
+        _c = ord(miwen[_0])
+        fuck = (_c)-1
+        mingwen+=(chr(fuck))
+    print(mingwen[::-1])
+if __name__ == '__main__':
+    main()

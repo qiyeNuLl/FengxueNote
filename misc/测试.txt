@@ -1,0 +1,23 @@
+nmap -T4 -Pn -sV -v 10.71.1.143
+发现1433sql-server服务
+
+nmap -T4 -Pn -sV -v 10.71.1.143 -p 20000-
+发现27689端口，服务为iis6-http，iis6-apache解析漏洞预备
+
+python3 dirsearch.py -u "http://10.71.1.143:27689"
+后台扫描，发现数据库配置文件bak备份---web.config.bak
+后台登录界面http://10.71.1.143:27689/default.aspx
+文件上下传界面/admin/admin.aspx
+
+
+使用Navicat链接sal-server
+账号和密码在web.config.bak里面
+
+
+依据sql-server用户表的账号密码登录后台
+获得 key1:4k3s9m3d
+
+
+
+
+

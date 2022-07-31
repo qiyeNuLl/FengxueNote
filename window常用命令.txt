@@ -1,0 +1,63 @@
+ipconfig /release 清空ip配置
+ipconfig /renew   重新获取IP配置
+ipconfig /flushdns 更新dns
+whoami /groups  组信息
+netstat -ano端口状态
+regedit 注册表
+msconfig 开机启动配置
+services.msc 服务管理器
+services <service_name> start 开启某服务
+arp -a arp缓存表
+logoff 注销
+runas /user:cyber cmd  切换用户
+
+ipconfig /all 查看ip
+net user 查看服务器账号
+netstat -ano 查看当前服务器端口开放情况
+ver 查看服务器操作系统
+systeminfo 查看服务器配置信息
+tasklist /svc 查看服务器进程
+taskkill -PID pid号 结束某个pid号进程
+taskkill /im qq.exe /f 结束qq进程
+net user cr cr /add 增加一个用户名cr密码cr的用户
+net localgroup administrators cr /add 将cr提升至管理员
+whoami 当前操作账户
+
+win+e 资源管理
+calc 计算器
+mstsc 远程桌面连接
+
+net user /domain	查询域用户
+net group /domain	查询域里面的工作组
+net group “domain admins” /domain	查询域管理员用户组
+net localgroup administrators /domain	登录本机的域管理员
+net localgroup administrators workgroup\user001 /add	域用户添加到本机
+net group “domain controllers” /domain	查看域控制器(如果有多台)
+net time /domain	判断主域，主域服务器都做时间服务器
+net config workstation	当前登录域
+net session	查看当前会话
+net use \ip\ipc$ pawword /user:username	建立IPC会话[空连接-***]
+net share	查看SMB指向的路径[即共享]
+net view	查询同一域内机器列表
+net view \ip	查询某IP共享
+net view /domain	查询域列表
+net view /domain:domainname	查看workgroup域中计算机列表
+net start	查看当前运行的服务
+net accounts	查看本地密码策略
+net accounts /domain	查看域密码策略
+nbtstat –A ip	netbios 查询
+netstat –an/ano/anb	网络连接查询
+route print	路由表
+tasklist /V	查看进程[显示对应用户]
+tasklist /S ip /U domain\username /P /V	查看远程计算机进程列表
+qprocess *	类似tasklist
+qprocess /SERVER:IP	远程查看计算机进程列表
+nslookup –qt-MX Yahoo.com	查看邮件服务器
+whoami /all	查询当前用户权限等
+set	查看系统环境变量
+systeminfo	查看系统信息
+qwinsta	查看登录情况
+qwinsta /SERVER:IP	查看远程登录情况
+fsutil fsinfo drives	查看所有盘符
+
+

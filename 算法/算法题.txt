@@ -1,0 +1,36 @@
+力扣
+面试题 01.09. 字符串轮转
+        if s1 == s2:
+            return True
+        n = len(s1)
+        k = 0
+        while k < n:
+            k = k%n
+            if s1[n-k:] + s1[:n-k] == s2:
+                return True
+            k += 1
+        return False
+
+面试题 10.05. 稀疏数组搜索（这题什么鬼，简单过头了）
+        for i in range(len(words)) :
+            if words[i] == s:
+                return i
+        return -1
+
+面试题 16.02. 单词频率
+class WordsFrequency:
+    def __init__(self, book: List[str]):
+        self.book_dic = Counter(book)
+
+    def get(self, word: str) -> int:
+        return self.book_dic.get(word,0)
+
+
+
+
+
+
+
+
+
+	

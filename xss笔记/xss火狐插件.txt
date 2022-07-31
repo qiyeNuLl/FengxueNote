@@ -1,0 +1,9 @@
+Hackbar v2(原Hackbar收费)
+
+Firebug（现停更）
+
+Tamper Data（限用）
+
+Live HTTP Headers
+
+Editor Cookie

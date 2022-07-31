@@ -1,0 +1,21 @@
+    State  : Sleeping, pid: 3553
+Another app is currently holding the yum lock; waiting for it to exit...
+解决：kill -9 3553
+
+curl: (60) The certificate issuer's certificate has expired. Check your system date and time.
+解决：
+[root@localhost ~]# yum install ntp -y
+[root@localhost ~]# ntpdate -u 0.centos.pool.ntp.org    #时差问题，这里校准
+[root@localhost ~]# yum install ca-certificates      #也可能是ca证书问题，这里更新一下
+[root@localhost ~]# update-ca-trust extract
+
+curl: (35) Cannot communicate securely with peer: no common encryption algorithm(s).
+解决：
+#没错，curl出问题了，这里更新一下
+[root@localhost ~]# yum update -y http://pub.mirrors.aliyun.com/centos/7/os/x86_64/Packages/ca-certificates-2020.2.41-70.0.el7_8.noarch.rpm http://pub.mirrors.aliyun.com/centos/7/os/x86_64/Packages/p11-kit-0.23.5-3.el7.x86_64.rpm http://pub.mirrors.aliyun.com/centos/7/os/x86_64/Packages/p11-kit-trust-0.23.5-3.el7.x86_64.rpm
+[root@localhost ~]# yum update curl -y     
+[root@localhost ~]# yum makecache fast
+
+curl: (22) The requested URL returned error: 404 Not Found
+#大概率是你命令出错了
+

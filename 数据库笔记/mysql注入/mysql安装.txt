@@ -1,0 +1,11 @@
+Linux + apache+mysql+php
+
+yum -y install mysql-server  //安装mysql
+service mysqld start         //启动mysql服务
+mysqladmin -u 用户 -p 密码   //创建用户账号
+
+
+Window +apache+mysql+php
+
+https://dev.mysql.com/downloads/installer/     //下载地址
+mysql -h localhost -u 用户 -p 密码              //登录mysql

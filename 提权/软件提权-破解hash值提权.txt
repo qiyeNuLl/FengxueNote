@@ -1,0 +1,3 @@
+上传pwdump.exe 运行获取hash值
+拿到lc5、彩虹表、ophcrack、getpass破解
+即可得到管理员密码

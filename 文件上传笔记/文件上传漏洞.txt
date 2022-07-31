@@ -1,0 +1,48 @@
+服务器上传文件命名规则
+1、上传文件名和服务器命名一致
+2、不一致（随机，时间日期命名）
+
+文件头欺骗漏洞
+在一句话木马前面加入GIF89a 然后将木马保存为图片的格式
+例如cr.jpg cr.gif
+
+文件头欺骗可以绕过简单的waf
+
+filepath漏洞
+突破自动命名规则
+xxxxx.gif
+一、改变文件上传后的路径
+/a.asp/  需要一定创建权限，不一定能成功创建
+成功创建后为
+/a.asp/xxxx.gif
+二、直接改变文件名称
+/a.asp;.
+修改后
+/a.asp;.xxxxx.gif
+
+以上两种均bp抓包放包使用
+
+00截断
+如c.php jpg（apache从右到左判断文件类型）
+中间空格HEX改为00
+或者
+c.php%00jpg
+把%00给convert selection--url--url_decode转码
+
+
+filetype漏洞
+修改content-type
+如图片：image/jpeg
+asp: text/asp
+
+表单提交按钮
+slblog.upload.com/sleditor/upload.asp
+写入表单
+<input type="submit" value="提交" name="bb">
+
+上传a.asa
+
+
+
+
+

@@ -1,0 +1,30 @@
+信息搜集
+nmap
+zenmap
+scanport
+ntscan
+arp -a
+net view
+
+自身配置确定（ip、网关、NDS等）
+windows：
+ipconfig /all
+GetPass.exe
+
+linux：
+ifconfig
+ip route show
+
+主机发掘：
+windows：
+ping ip地址
+arp -a
+
+linux：
+nmap -T4 -Pn -v -sV ip段
+arp -a
+
+
+
+
+

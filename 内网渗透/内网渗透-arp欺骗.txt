@@ -1,0 +1,10 @@
+netfuck（wpcapinstall）
+双向欺骗
+来源ip--目标ip
+中间人--自己ip
+目标ip--网关ip
+
+
+插件管理--修改器--http_inject
+
+

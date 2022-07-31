@@ -1,0 +1,32 @@
+msf常用漏洞利用命令
+
+search <name>
+搜索可利用漏洞
+use <exploit name>
+使用漏洞
+show options
+显示选项
+set <option name> <option>
+设置选项
+show payload
+显示装置
+
+show targets
+显示目标（os版本）
+set TARGET <target number>
+设置目标版本
+exploit    开始漏洞攻击
+session -l  列出会话
+session -i <ID>   选择会话
+session -k <ID> 结束会话
+<ctrl>z 把会话放到后台 
+<ctrl>c 结束会话
+
+show auxiliary 显示辅助模块
+use <suxiliary name> 使用辅助模块
+set <OPTION NAME> <option>设置选项
+run 运行模块
+
+
+
+  

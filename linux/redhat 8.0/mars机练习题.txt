@@ -1,0 +1,227 @@
+RHCSA考试
+时间： 2.5h
+分数： 210/300
+代码： ex200
+一、部署练习环境
+  1、恢复快照
+  2、启动vmnet1网卡
+  3、打开rh294目录
+     1）删除.lck目录
+     2）修改vmware兼容版本（vmware15及以上版本不需要此步）
+              修改：virtualHW.version = "14"
+  4、调内存（物理内存8G，调到4.8G）
+  5、启动虚拟机
+  6、安装测试练习环境
+      1）挂载光盘
+
+      2）安装测试脚本程序
+         [kiosk@foundation0 ~]$ df -h
+              /dev/sr0         98K   98K     0 100% /run/media/kiosk/RHCSA
+         [kiosk@foundation0 ~]$ su -     //切换到root用户
+               Password:                        //密码:  Asimov
+          [root@foundation0 ~]# 
+         [root@foundation0 ~]# yum -y install /run/media/kiosk/RHCSA/ex200v8-1.2.0-191211.x86_64.rpm
+          3）运行环境部署脚本
+              [root@foundation0 ~]# exit     //退回kiosk普通用户
+                    logout
+             [kiosk@foundation0 ~]$ exam-setup       //部署环境
+
+二、练习
+mars.domain250.example.com	172.25.250.100
+venus.domain250.example.com	172.25.250.200
+mars 的根密码已经设置为 flectrag
+1、    将 mars 配置为具有以下网络配置：
+        主机名：mars.domain250.example.com
+        IP 地址：172.25.250.100
+        子网掩码：255.255.255.0
+        网关：172.25.250.254
+[root@mars ~]# hostnamectl set-hostname mars.domain250.example.com
+[root@mars ~]# nmcli connection 
+NAME                UUID                                  TYPE      DEVICE 
+Wired connection 1  6bc56692-0f3b-3bf9-941f-8bc9f5ff7941  ethernet  enp1s0 
+
+[root@mars ~]# nmcli connection modify "Wired connection 1" ipv4.addresses 172.25.250.100/24 ipv4.gateway 172.25.250.254 ipv4.dns 172.25.250.254 ipv4.method manual connection.autoconnect yes
+
+[root@mars ~]# nmcli connection up "Wired connection 1"
+
+
+2、配置您 的系统以使用默认存储库
+    YUM 存储库已可以从 http://content/rhel8.0/x86_64/dvd/BaseOS 和 http://content/rhel8.0/x86_64/dvd/AppStream 使用配置您的系统，以将这些位置用作默认存储库
+解法1：
+[root@mars ~]# cd /etc/yum.repos.d/
+[root@mars yum.repos.d]# vi base.repo
+   [base]
+   name=base
+   baseurl=http://content/rhel8.0/x86_64/dvd/BaseOS
+   enabled=1
+   gpgcheck=0
+[root@mars yum.repos.d]# vi app.repo
+    [app]
+    name=app
+    baseurl=http://content/rhel8.0/x86_64/dvd/AppStream
+    enabled=1
+    gpgcheck=0
+
+验证：
+[root@mars yum.repos.d]# yum -y install vim
+不能安装可能原因：
+   1）网络问题（IP，网关，DNS）
+   2）/etc/yum.repos.d/目录两个文件
+           文件名后缀不是  .repo
+           文件内容有错误
+           
+解法2：
+  [root@mars ~]# yum -y install http://content/rhel8.0/x86_64/dvd/BaseOS/Packages/dnf-utils-4.0.2.2-3.el8.noarch.rpm
+ [root@mars ~]#yum-config-manager --add-repo http://content/rhel8.0/x86_64/dvd/BaseOS
+ [root@mars ~]#yum-config-manager --add-repo http://content/rhel8.0/x86_64/dvd/AppStream
+ [root@mars ~]#cd /etc/yum.repos.d/
+ 
+ [root@mars ~]#vi content_rhel8.0_x86_64_dvd_BaseOS.repo 
+              gpgcheck=0
+ [root@mars ~]# vi content_rhel8.0_x86_64_dvd_AppStream.repo 
+           gpgcheck=0
+
+3、    调试 SELinux
+    非标准端口 82 上运行的 Web 服务器在提供内容时遇到问题。根据需要调试并解决问题，使其满足以下条件：
+        系统上的 Web 服务器能够提供 /var/www/html 中所有现有的 HTML 文件（注：不要删除或以其他方式改动现有的文件内容）
+        Web 服务器在端口 82 上提供此内容
+        Web 服务器在系统启动时自动启动
+解：
+    [root@mars ~]# semanage port -a -t http_port_t -p tcp 82
+    [root@mars ~]# systemctl restart httpd
+    [root@mars ~]# systemctl enable httpd
+
+[root@mars ~]# curl 127.0.0.1:82/file1
+    <title>403 Forbidden</title>
+[root@mars ~]# curl 127.0.0.1:82/file2
+EX200 Testing
+[root@mars ~]# curl 127.0.0.1:82/file3
+EX200 Testing
+root@mars ~]# ll -Z /var/www/html/
+total 12
+-rw-r--r--. 1 root root unconfined_u:object_r:default_t:s0           14 Nov  8 09:23 file1
+-rw-r--r--. 1 root root unconfined_u:object_r:httpd_sys_content_t:s0 14 Nov  8 09:23 file2
+-rw-r--r--. 1 root root unconfined_u:object_r:httpd_sys_content_t:s0 14 Nov  8 09:23 file3
+[root@mars ~]# chcon -t httpd_sys_content_t /var/www/html/file1
+[root@mars ~]# firewall-cmd --permanent --add-port=82/tcp
+ [root@mars ~]# firewall-cmd --reload 
+
+4、    创建用户帐户
+    创建下列用户、组和组成员资格：
+        名为 sysmgrs 的组
+        用户 natasha ，作为次要组从属于 sysmgrs
+        用户 harry ，作为次要组还从属于 sysmgrs
+        用户 sarah ，无权访问系统上的交互式 shell 且不是 sysmgrs 的成员
+        natasha 、 harry 和 sarah 的密码应当都是 flectrag
+[root@mars ~]# groupadd sysmgrs
+[root@mars ~]# useradd -G sysmgrs natasha
+[root@mars ~]# useradd -G sysmgrs harry
+[root@mars ~]# useradd -s /bin/false sarah
+[root@mars ~]# echo flectrag |passwd --stdin natasha
+ [root@mars ~]# echo flectrag |passwd --stdin harry
+ [root@mars ~]# echo flectrag |passwd --stdin sarah
+
+5、    配置 cron 作业
+    配置 cron 作业，该作业每隔 2 分钟运行并执行以下命令：
+        logger "EX200 in progress"，以用户 natasha 身份运行
+[root@mars ~]# crontab -e -u natasha
+ */2 * * * *    logger "EX200 in progress"
+
+[root@mars ~]# systemctl restart crond
+[root@mars ~]# systemctl enable crond
+
+
+6、    创建具有以下特征的协作目录 /home/managers ：
+        /home/managers 的组用权是 sysmgrs
+        目录应当可被 sysmgrs 的成员读取、写入和访问，但任何其他用户不具这些权限。（当然，root 用户有权访问系统上的所有文件和目录）
+        /home/managers 中创建的文件自动将组所有权设置到 sysmgrs 组
+[root@mars ~]# mkdir /home/managers
+[root@mars ~]# ll -d /home/managers/
+drwxr-xr-x. 2 root root 6 Nov  8 10:24 /home/managers/
+[root@mars ~]# chown :sysmgrs /home/managers
+[root@mars ~]# ll -d /home/managers/
+drwxr-xr-x. 2 root sysmgrs 6 Nov  8 10:24 /home/managers/
+[root@mars ~]# 
+[root@mars ~]# 
+[root@mars ~]# chmod 2770 /home/managers/
+[root@mars ~]# ll -d /home/managers/
+drwxrws---. 2 root sysmgrs 6 Nov  8 10:24 /home/managers/
+
+7、    配置 NTP
+    配置您的系统，使其成为 materials.example.com 的 NTP 客户端。（注：materials.example.com 是 classroom.example.com 的 DNS 别名）
+
+[root@mars ~]# vim /etc/chrony.conf
+ server materials.example.com iburst
+
+[root@mars ~]# systemctl restart chronyd.service 
+[root@mars ~]# systemctl enable chronyd.service 
+
+
+8、    配置 autofs
+    配置 autofs ，以按照如下所述自动挂载远程用户的主目录：
+        materials.example.com ( 172.25.254.254 ) NFS 导出 /rhome 到您的系统。此文件系统包含为用户 remoteuser1 预配置的主目录
+        remoteuser1 的主目录是 materials.example.com:/rhome/remoteuser1
+        remoteuser1 的主目录应自动挂载到本地 /rhome 下的 /rhome/remoteuser1
+        主目录必须可供其用户写入
+        remoteuser1 的密码是 flectrag
+[root@mars ~]# yum -y install autofs
+[root@mars ~]# vi /etc/auto.master
+     /rhome  /etc/auto.misc
+
+[root@mars ~]# vim /etc/auto.misc
+remoteuser1     -fstype=nfs,rw   materials.example.com:/rhome/remoteuser1
+[root@mars ~]# systemctl restart autofs
+[root@mars ~]# systemctl enable autofs
+
+9、    配置 /var/tmp/fstab 权限
+    将文件 /etc/fstab 复制到 /var/tmp/fstab 。配置 /var/tmp/fstab 的权限以满足如下条件：
+        文件 /var/tmp/fstab 自 root 用户所有
+        文件 /var/tmp/fstab 属于组 root
+        文件 /var/tmp/fstab 应不能被任何人执行
+       用户 natasha 能够读取和写入 /var/tmp/fstab
+        用户 harry 无法写入或读取 /var/tmp/fstab
+        所有其他用户（当前或未来）能够读取 /var/tmp/fstab
+[root@mars ~]# cp /etc/fstab /var/tmp/fstab
+[root@mars ~]# ll /var/tmp/fstab
+-rw-r--r--. 1 root root 427 Nov  8 10:53 /var/tmp/fstab
+[root@mars ~]# 
+[root@mars ~]# chown root:root /var/tmp/fstab
+[root@mars ~]# 
+[root@mars ~]# chmod a-x /var/tmp/fstab 
+[root@mars ~]# 
+[root@mars ~]# setfacl -m u:natasha:rw /var/tmp/fstab
+[root@mars ~]# setfacl -m u:harry:--- /var/tmp/fstab 
+[root@mars ~]# chmod a+r /var/tmp/fstab 
+[root@mars ~]# getfacl  /var/tmp/fstab
+
+
+ 10、  配置用户帐号
+    配置用户 manalo ，其用户 ID 为 3533。此用户的密码应当为 fletrag。
+[root@mars ~]# useradd -u 3533 manalo
+[root@mars ~]# tail -1 /etc/passwd
+manalo:x:3533:3533::/home/manalo:/bin/bash
+[root@mars ~]# echo fletrag | passwd --stdin manalo 
+
+11、    查找文件
+    查找当 jacques 所有的所有文件并将其副本放入 /root/findfiles 目录
+[root@mars ~]# id jacques
+uid=1003(jacques) gid=1003(jacques) groups=1003(jacques)
+
+[root@mars ~]# mkdir /root/findfiles
+[root@mars ~]# find / -user jacques -exec cp -a {} /root/findfiles/ \;
+
+12、    查找字符串
+    查找文件 /usr/share/xml/iso-codes/iso_639_3.xml 中包含字符串 ng 的所有行。将所有这些行的副本按原始顺序放在文件 /root/list 中。 /root/list 不得包含空行，且所有行必须是 /usr/share/xml/iso-codes/iso_639_3.xml 中原始行的确切副本。
+[root@mars ~]# grep ng /usr/share/xml/iso-codes/iso_639_3.xml > /root/list
+
+13、创建存档
+创建一个名为 /root/backup.tar.gz 的 tar 存档，其应包含 /usr/local 的 tar 存档，其应包含 /usr/local 的内容。该 tar 存档必须使用 gzip 进行压缩
+[root@mars ~]# tar czvf /root/backup.tar.gz /usr/local
+
+
+三 、 评分
+[root@mars ~]# exit                 
+logout
+Connection to 172.25.250.100 closed.
+[kiosk@foundation0 ~]$    
+[kiosk@foundation0 ~]$ bash /run/media/kiosk/RHCSA/rhcsa-exam-grade

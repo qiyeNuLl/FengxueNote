@@ -1,0 +1,16 @@
+nmap -T4 -A -v 深入式扫描
+nmap -sS -sU -T4  -A -v 同上、且扫UDP
+nmap -p 1-65535 -T4 -A -v 扫描所有TCP端口
+nmap -T4 -A -v -Pn 不使用ping
+nmap -sn 使用ping
+nmap -T4 -F 快速扫描
+nmap -sV -T4 -O -F --version-light 加强版快速扫描
+nmap -sn --traceroute 快速路由跟踪扫描
+nmap -sS -sU -T4 -A -v -PE -PP -PS80,443 -PA3389 -PU40125 -PY -g 53 --script"(discovery andsafe)" 慢速全面扫描
+
+-sT   隐秘的tcp连接扫描
+-A    对特定服务全面分析
+
+
+
+

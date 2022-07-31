@@ -1,0 +1,10 @@
+弹框式
+....
+<script>alert("xss")</script>
+....
+
+xss在html代码段,如网页不断刷新
+<meta http-equiv="refresh" content="0;">
+
+嵌入其它网站链接
+<iframe src=网址 width=0 height=0></iframe>

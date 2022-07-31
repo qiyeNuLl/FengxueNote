@@ -1,0 +1,15 @@
+常用工具
+wiresharke
+cain（功能强）
+snifferpass（ftp）
+
+监听密码
+3389
+telnet
+ftp
+http
+
+
+wiresharke使用
+查询ip源及http协议：
+ip.src==ip地址 && http

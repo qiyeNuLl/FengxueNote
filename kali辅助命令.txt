@@ -1,0 +1,14 @@
+dhclient eth0
+重新获取ip配置信息
+
+/etc/apt/sources   软件源
+apt-get update 更新目录
+apt-get upgrade 更新文件
+
+vmhgfs-fuse .host:/Desktop /root/Desktop/desktop -o subtype=vmhgfs- fuse,allow_other
+挂载共享文件夹
+
+msf>searchsploit thinkphp
+
+解决乱码：
+chcp 65001

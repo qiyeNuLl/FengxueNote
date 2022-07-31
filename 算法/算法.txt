@@ -1,0 +1,329 @@
+枚举
+把所有情况列出来进行条件选择
+例如：（先选出符合对差为1的组，组末尾下标-组开始下标得出长度=所需长度，使用max函数返回最大值）
+        nums.sort()
+        begin, res = 0, 0
+        for end in range(len(nums)):
+            while nums[end] - nums[begin] > 1:
+                begin += 1
+            if nums[end] - nums[begin] == 1:
+                res = max(res, end - begin + 1)
+        return res
+
+upper() 全部转换成大写
+lower() 全部转换成小写
+get()取出字典的键值
+strip()去除首位指定字符
+split()切片
+str = "Line1-abcdef \nLine2-abc \nLine4-abcd";
+print str.split( );       # 以空格为分隔符，包含 \n
+print str.split(' ', 1 ); # 以空格为分隔符，分隔成两个
+
+
+min()
+max()
+可以用于通过判断字典序，来确认最大与最小值
+
+统计类counter
+from collections import Counter
+用法：
+a = Count(b)
+
+双指针
+定义两个指针，可以都从0开始，或是一个从0开始，一个从末尾开始
+
+可以使用切片来判断s1中是否包含s2，如果能够成功切片则存在，否则返回空
+temp = haystack.split(needle)
+
+移动窗口
+滑动窗口主要应用在数组和字符串上
+双指针组合成有范围、类似可移动窗口的指针块，对范围内字符串的判断
+
+我们在字符串 S 中使用双指针中的左右指针技巧，
+初始化 left = right = 0，
+把索引闭区间 [left, right] 称为一个「窗口」。
+
+我们先不断地增加 right 指针扩大窗口 [left, right]，
+直到窗口中的字符串符合要求（包含了 T 中的所有字符）。
+
+此时，我们停止增加 right，转而不断增加 left 指针缩小窗口 [left, right]，
+直到窗口中的字符串不再符合要求（不包含 T 中的所有字符了）。
+同时，每次增加 left，我们都要更新一轮结果。
+
+重复第 2 和第 3 步，直到 right 到达字符串 S 的尽头。
+例如：
+def demo():
+    s1 = 'ad'
+    s2 = 'dsjbvqwedaviwe'
+    counter1 = Counter(s1)
+    N = len(s2)
+    left = 0
+    right = len(s1) - 1
+    counter2 = Counter(s2[0:right])    //核心，移动窗口范围为s1且能在s2范围上判断字符
+    while right < N:
+        counter2[s2[right]] += 1
+        if counter1 == counter2:
+            return True
+        counter2[s2[left]] -= 1
+        if counter2[s2[left]] == 0:
+            del counter2[s2[left]]
+        left += 1
+        right += 1
+    return False
+
+快慢指针
+定义slow、fast
+两者从零开始遍历，不同的是，slow移动一步，fast移动两部
+当fast到达末尾时，slow必然位于中间
+
+
+哈希表
+通过创建字典来解决，遍历字符来增加到字典，并可以计数
+例如：（已知哈希表求转化）
+    roma_value = {
+            'I' : 1,
+            'V' : 5,
+            'X' : 10,
+            'L' : 50,
+            'C' : 100,
+            'D' : 500,
+            'M' : 1000
+        }
+    def romanToInt(self, s: str) -> int:
+        ans = 0
+        n = len(s)
+        for i, ch in enumerate(s):
+            value = Solution.roma_value[ch]
+            if i < n - 1 and value < Solution.roma_value[s[i + 1]]:
+                ans -= value
+            else:
+                ans += value
+        return ans
+
+有序哈希表
+字典直接预定有序字符，如26个字母的字典
+python3.6后字典有序并且效率高
+在字符串长度较大、重复字符很多时，“有序哈希表” 解法理论上效率更高。
+
+哈希表寻找只出现过一次的单词
+def demo():
+    s1 = "this apple is sweet"
+    s2 = "this apple is sour"
+    w1 = s1.split()
+    w2 = s2.split()
+    w = Counter(w1+w2)
+    res = []
+    for w, f in w.items():
+        if f == 1:
+            res.append(w)
+    return res
+
+
+
+
+字符串
+通过检查字符串是否相等，来返回相同前缀部分
+def demo():
+    strs = ["flower","flow","flight"]
+    str0 = min(strs)
+    str1 = max(strs)
+    for i in range(len(str0)):
+        if str0[i] != str1[i]:
+            return str0[:i]
+    return str0
+
+每2k个数，就对前k个字符反转
+    s = "abcdefghij"
+    k = 2
+    ret = list(s)
+    for i in range(0, len(s), 2*k):
+        ret[i:i+k] = reversed(ret[i:i+k])
+    return "".join(ret)
+
+
+轮转数组
+应该考虑到轮转次数大于数组长度的情况，
+毕竟轮转数组长度等于原数组，可以由余数判断轮转几位
+        n = len(nums)
+        k = k%n
+        nums[:] = nums[n - k:] + nums[:n - k]
+
+
+用字典方式判断变位词
+思路将字符串重组，只要是变位词，他们重组的字母肯定一致
+strs = ["eat", "tea", "tan", "ate", "nat", "bat"]
+dic = {}
+for i in strs:
+    s = ''.join(sorted(i))
+    if dic.get(s) == None:
+        dic[s] = [i]
+    else:
+        dic[s].append(i)
+print(list(dic.values()))
+
+通过取整和取余来翻转数字
+tmp = num % 10
+num = num // 10
+
+pow() 方法返回 xy（x 的 y 次方） 的值
+
+移位计算二进制数中1的个数
+class Solution:
+    def hammingWeight(self, n: int) -> int:
+        res = 0
+        while n:
+            res += n & 1
+            n = n >> 1
+        return res
+
+可删一次字符的判断回文
+    isp = lambda s: s == s[::-1]
+    test = lambda s, x: s[:x] + s[x+1:]
+    left, right = 0, len(s) - 1
+    while left < right:
+        if s[left] != s[right]:
+            return isp(test(s,left)) or isp(test(s,right))
+        left += 1
+        right -= 1
+    return True
+
+
+通过判断两边相等和+中心索引=整个数组和来得到中心索引下标
+    all = sum(nums)
+    left = 0
+    n = len(nums)
+    for i in range(n):
+        if left*2+nums[i] == all:
+            return i
+        else:
+            left += nums[i]
+    return -1
+
+位运算
+通过位运算，找出两个字符串中多余的字符
+c = ord("a")^ord("b")^ord("c")
+c = c^ord("a")^ord("b")^ord("c")
+print(c)
+相同字符位运算会为0
+
+二维数组顺时针90°翻转
+    for i in range(len(matrix)):
+        for j in range(i):
+            matrix[i][j], matrix[j][i] = matrix[j][i], matrix[i][j]
+    for i in range(len(matrix)):
+        matrix[i][:] = matrix[i][::-1]
+    return matrix
+逆时针90°先对称反转，在对角翻转
+
+矩阵清零（字典存储需要清零的横纵列）
+    matrix = [
+  [0,1,2,0],
+  [3,4,5,2],
+  [1,3,1,5]
+]
+    dic = {"i":[],"j":[]}
+    for i in range(len(matrix)):
+        for j in range(len(matrix[0])):
+            if matrix[i][j] == 0:
+                dic["i"].append(i)
+                dic["j"].append(j)
+    for i in dic["i"]:
+        for j in range(len(matrix[0])):
+            matrix[i][j] = 0
+    for i in dic["j"]:
+        for j in range(len(matrix)):
+            matrix[j][i] = 0
+    return matrix
+
+
+计数排序，寻找数组内，每个值比它小的值的数量
+    place = [0] * 101
+    output = []
+    for n in nums:
+        place[n] += 1
+    lessthan = []
+    temp = 0
+    for p in place:
+        lessthan.append(temp)
+        temp += p
+    for n in nums:
+        output.append(lessthan[n])
+    return output
+
+创建二维空数组
+import numpy as np
+25x25正方形空数组，类型为float
+dp = np.zeros((25,25),dtype=np.float64)
+dp = [ [0 for i in range(25)] for j in range(25)]
+
+
+动态规划
+动态规划三要素为最优子结构、边界和状态转移函数
+
+共有n种图案的印章，每种图案的出现概率相同。小A买了m张印章，求小A集齐n种印章的概率。
+使用二维数组存入参数i、j、n计算的概率，i表示购买张数，j表示印章的总种类数目为n时小A收集齐j种印章的概率
+1、显然j不可能大于i，所以概率为0
+2、j = 1时，印章种类只有一种（只要有买，概率肯定为1），故i>=1时，均有dp[i][j]=n*(1/n)**(i)
+3、j > 0时，一种是新买的一张印章种类是自已手里已经有的，原来买之前印章数为（i-1），种类j没变为，故概率为dp[i-1][j]*(j/n)
+	  一种是新买的一张印章种类是自己手里没有的，原来印章数为（i-1），原来种类为（j-1），而现在取的和前面没有重复，因此取的是 n-（j-1）故概率为
+	  dp[i-1][j-1]*((n-j+1)/n)
+状态表达式为：dp[i-1][j]*(j/n)+dp[i-1][j-1]*((n-j+1)/n)
+import numpy as np
+
+n, m = map(int, input().split())
+dp = [ [0 for i in range(25)] for j in range(25)]
+
+for i in range(1, m+1):
+    for j in range(1, n+1):
+        if i < j:
+            dp[i][j] = 0
+        elif j == 1:
+            dp[i][j] = (1/n)**(i-1)
+        else:
+            dp[i][j] = (dp[i-1][j])*(j*1.0/n) + (dp[i-1][j-1])*((n-j+1)*1.0/n)
+a = float(dp[m][n])
+
+print("%.4f"%a)
+
+
+前缀和解决连续数组和问题
+arr = [1,4,2,5,3]
+    n = len(arr)
+    if n < 3:
+        return sum(arr)
+
+    preSum = [0] * (n + 1)
+    for i in range(n):
+        preSum[i + 1] = preSum[i] + arr[i]
+
+    ans = preSum[-1]
+    k = 3
+    while k <= n:
+        for i in range(k, n+1):
+            print(preSum[i] - preSum[i-k])
+            ans += preSum[i] - preSum[i-k]
+        k += 2
+    return ans
+
+快速判断等差数列（c++）
+sort(arr.begin(), arr.end());
+        for (int i = 1; i < arr.size() - 1; ++i) {
+            if (arr[i] * 2 != arr[i - 1] + arr[i + 1]) {
+                return false;
+            }
+        }
+        return true;
+
+大小写转换（C++）
+大写变小写、小写变大写 : 字符 ^= 32;
+大写变小写、小写变小写 : 字符 |= 32;
+小写变大写、大写变大写 : 字符 &= -33;
+class Solution {
+public:
+    string toLowerCase(string str) {
+        for(auto &i : str){
+            i |= 32;
+        }
+        return str; 
+    }
+};

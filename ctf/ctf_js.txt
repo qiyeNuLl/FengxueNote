@@ -1,0 +1,5 @@
+NaNNaNNaNNaN-Batman
+改.html，会有输入框
+一堆乱码，末尾有eval()
+把eval()替换成alert()来返回无乱码的js代码
+代码审计后，得出输入框应有值，来返回js代码中的flag

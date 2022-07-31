@@ -1,0 +1,18 @@
+import requests
+
+url1="http://challenge-7fe159b295bb20a1.sandbox.ctfhub.com:10800/image.php?id=1"
+url2="http://challenge-7fe159b295bb20a1.sandbox.ctfhub.com:10800/image.php?id=99"
+
+
+
+r1 = requests.get(url1)
+print(r1.content)
+if r1.content :
+    print("true")
+r2 = requests.get(url2)
+print(r2.content)
+if r2.content :
+    print("true")
+
+a = len("e68adb7b446109b310e16b9312396e3f")
+print(a)

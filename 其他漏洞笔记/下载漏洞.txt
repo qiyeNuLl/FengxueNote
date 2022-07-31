@@ -1,0 +1,6 @@
+对下载参数进行修改，直接下载敏感文件
+利用：
+通过蜘蛛爬行
+找到该url
+下载conn.asp config.php config.asp
+db.mdb

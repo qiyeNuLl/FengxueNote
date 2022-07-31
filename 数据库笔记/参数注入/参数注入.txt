@@ -1,0 +1,13 @@
+数字型注入
+
+地址?id=xx and 1=1
+
+
+字符型注入
+
+地址?id=xx' and 1=1#
+地址?id=xx' and 1=1'
+
+搜索型注入
+select * from news where id="'%like $id%"
+%%'and 1=2 and '%'='%'

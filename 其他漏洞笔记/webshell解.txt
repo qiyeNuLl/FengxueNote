@@ -1,0 +1,16 @@
+大马，网站后门，为提权做准备
+上传webshell到可读可写文件夹
+服务器打包，便于查看源码
+
+后台密码爆破
+bp
+webshell软件爆破
+
+短文件利用
+windows+apache环境
+http://地址/upload/data/backup_7edc67/150925eQAjI5pB-1.sql
+http://地址/upload/data/backup~1/150925~1.sql
+
+
+
+

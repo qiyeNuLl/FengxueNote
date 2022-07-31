@@ -1,0 +1,39 @@
+cmd登陆
+
+1.sqlplus
+2.win+r > sqlplus admin/admin
+
+sql格式化
+SELECT * FROM emp;  //查表
+SET LINESIZE 300;  //设置每行显示数据长度
+SET PAGESIZE 30;   //设置每个页面数据行数
+窗口-属性
+
+login.sql（自动脚本）
+
+
+SELECT * FROM tab;  //查看当前用户所有数据表
+
+COL tname FOR A10;   //显示10列
+select * from tab;
+
+SHOW USER;    //查看用户
+
+CONN admin/passwd    //切换用户
+CONN sys/change_on_install as sysdba;   /切换sys用户
+
+SELECT * FROM scott.tmp;
+//查询scott用户的tmp表
+
+ED demo;
+//打开或创建demo.sql文件
+
+@demo；
+//执行文件
+
+调用本机命令
+HOST echo "demo";  //写出demo
+HOST cls; 或 clear scr； //清屏
+
+
+

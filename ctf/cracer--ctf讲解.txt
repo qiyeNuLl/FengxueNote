@@ -1,0 +1,45 @@
+CTF web
+大部分xss和sql注入都是请求参数引起的问题，
+请求就会执行，但会有对输入的字符串有过滤，
+这时就要考虑过滤，转码、大小写、双写等
+sql注入
+考点：
+常规注入：
+数据库get型id=xx and 11=11
+
+
+http头注入
+
+重点
+考注入语句，sql语句
+宽字节注入
+显错注入
+过滤绕过防注入函数
+绕过思路：
+1.大小写转换
+2.注释使用 用/**/替换空格
+用/*!and*/ 包含关键字
+3.污染关键字 an%00d 11=11
+a%01nd 11=11
+
+
+搜索型注入
+
+宽字节注入
+%bf%27
+sqlmap.py -u "地址" --risk 3 --dbms mysql
+--tamper "unmagiquotes.py" -v 3 --level
+-D sql5 -T key --columns
+
+
+
+xss
+基本反射型xss
+id=11 <script>alert(_flag_)</script>
+考点
+防xss过滤函数绕过    高
+编码技术
+标签绕过
+
+csrf
+

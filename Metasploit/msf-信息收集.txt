@@ -1,0 +1,103 @@
+1.whois查询
+msf> whois example.com
+msf> whois ip地址
+
+2.在线收集服务器ip信息工具
+
+3.nslookup
+
+
+msf模块扫描
+msf> use auxiliary/scanner/ip/ipidseq #ipid序列扫描器
+show options       查看配置
+set RHOSTS 192.168.1.0/24      设置目标ip网段
+set RPORT 8080          设置目标端口（哪些主机开放8080）
+set THREADS 50          设置线程
+run                               启动
+
+
+使用 portscan模块扫描
+msf> search postscan
+msf> use auxiliary/scanner/postscan/syn
+set RHOSTS 192.168.1.111
+set THREADS 50
+run
+
+
+特定扫描(网段开启smb的主机)
+smb_version模块
+msf> use auxiliary/scanner/smb/smb_version
+show options
+set RHOSTS 192.168.1.111
+run
+db_hosts -c address,os_flavor
+
+
+找mssql主机
+msf> use auxiliary/scanner/mssql/mssql_ping
+show options
+set RHOSTS 192.168.1.0/24
+set THREADS 255
+run
+
+
+SSH服务器扫描
+msf> use auxiliary/scanner/ssh/ssh_version
+set RHOSTS 192.168.1.0/24
+set THREADS 50
+run
+
+
+Telnet服务扫描
+msf> use auxiliary/scanner/telnet/telnet_version
+set RHOSTS 192.168.1.0/24
+set THREADS 50
+run
+
+
+FTP主机扫描
+msf> use auxiliary/scanner/ftp/ftp_version
+show options
+set RHOSTS 192.168.1.0/24
+set THREADS 255
+run
+
+
+扫FTP匿名登陆
+msf> use auxiliary/scanner/ftp/anonymous
+set RHOSTS 192.168.1.9/24
+set THREADS 50
+run
+
+
+扫米局域网内存活主机
+msf> use auxiliary/scanner/discovery/arp_sweep
+set RHOSTS 192.168.1,0/24
+set THREADS 50
+run
+
+
+扫描网站目录
+msf> use auxiliary/scanner/http/dir_scanner
+set RHOSTS 192.168.1.1
+set THREADS 50
+run
+
+
+扫描snmp主机
+msf> use auxiliary/scanner/snmp/snmp_login
+set RHOSTS 192.168.1.0/24
+set THREADS 50
+run
+
+
+扫描网站中的E-mail地址
+msf> search_email_collector
+use auxiliary/gather/search_email_collector
+set DOMAIN cracer.com   设置域名
+run
+
+
+嗅探ftp抓包
+msf> use auxiliary/sniffer/psnuffle
+run

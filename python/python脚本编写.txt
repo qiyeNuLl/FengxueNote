@@ -1,0 +1,14 @@
+ascii码
+ord()
+
+ascii码对应字符
+chr()
+
+append() 方法用于在列表末尾添加新的对象。
+list.append(new_element)
+
+insert() 往列表头部添加元素，index为开始位置
+list.insert(index,new_element)
+
+将列表值在字符串中输出
+result = ''.join(temp_list)

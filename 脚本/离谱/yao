@@ -1,0 +1,6 @@
+import random
+
+max_man = 42
+team = max_man / 5
+for i in range(1,team,1):
+    print("第{}组的点数是：".format(i)+random.randint(1,6))

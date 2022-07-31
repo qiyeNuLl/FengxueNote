@@ -1,0 +1,8 @@
+https://mirrors.cloud.tencent.com/
+https://msdn.itellyou.cn/
+https://developer.aliyun.com/mirror/
+
+linux镜像源
+https://archive.kernel.org/centos-vault/6.1/isos/x86_64/
+
+https://mirrors.aliyun.com/kali-images/kali-2020.4/

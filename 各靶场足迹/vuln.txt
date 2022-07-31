@@ -1,0 +1,19 @@
+xss漏洞
+search  
+<script>alert('1')</script>
+
+登陆后，直接留言板xss攻击其他用户是可能的
+Our guestbook
+<script>alert('1')</script>
+
+
+
+
+
+sql漏洞
+浏览分类模块、浏览艺术模块
+注入点：1 or 1=1#
+union注入即可
+
+
+

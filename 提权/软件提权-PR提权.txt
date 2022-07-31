@@ -1,0 +1,3 @@
+上传pr.exe
+运行
+pr.exe "net user"

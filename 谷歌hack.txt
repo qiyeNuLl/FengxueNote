@@ -1,0 +1,20 @@
+googlehack 常用语法
+site       指定域名
+
+intext   正文中存在关键字的网页
+
+intitle   标题中存在关键字的网页
+
+info      一些基本信息
+
+inurl    URL存在关键字的网页
+
+filetype 搜索指定文件类型
+
+实例演示
+1.搜索存在敏感信息的网站
+
+intitle:管理登录    filetype:php
+————————————————
+版权声明：本文为CSDN博主「星落.」的原创文章，遵循CC 4.0 BY-SA版权协议，转载请附上原文出处链接及本声明。
+原文链接：https://blog.csdn.net/smli_ng/article/details/105937285

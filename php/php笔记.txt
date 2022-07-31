@@ -1,0 +1,327 @@
+urldecode会解码两次，拿到参数前会自动解码一次，在对应php代码后，在解码一次
+%2561dmin   ==   admin（实战记录）
+
+checkFile(&$page)
+//将传入的参数赋给$page
+
+is_string(变量)
+检测是否是字符串
+
+in_array("字符串",变量)
+变量中有无字符串
+
+mb_substr("字符串",0,2)  //中文
+substr()  //英文
+同为返回部分字符串
+
+mb_strpos(变量，'字符串')
+返回要查找的字符串在别一个字符串中首次出现的位置(下标)
+
+empty()
+检查是否为空
+
+=>
+$css=array('style'=>'0');
+$css['style']=='0';
+
+->   引用对象成员
+class A{
+    public $a=123;
+}
+$obj=new A();
+echo $obj->a;//对象引用
+print_r($obj);//查看对象
+?>
+123A Object(
+    [a] => 123
+    [b] => 456
+)
+
+::
+用变量在类定义外部访问
+在类定义外部使用::
+调用parent方法
+使用作用域限定符
+调用基类的方法
+
+isset()
+检测变量是否已设置并且非null
+
+public  公有的
+
+__construct()
+创建一个新的 SimpleXMLElement 对象。
+
+__destruct()
+析构函数只有在对象被垃圾收集器收集前
+（即对象从内存中删除之前）才会被自动调用
+常结尾
+
+str_replace（"world","Peter","Hello world!"）
+将字符串中的world替换成peter
+
+stripos（"abc","a"）;
+查找 "a" 在字符串中第一次出现的位置，如a为词，则以开头词位置为准
+
+file_get_contents()
+file_get_contents(path,include_path,context,start,max_length)
+函数把整个文件读入一个字符串中
+文件的内容读入到一个字符串中的首选方法
+看到了玩意，记得用这个：
+data://text/plain;base64,写入的base64内容
+
+
+
+strlen（'shanghai'）
+函数返回字符串 "Shanghai" 的长度
+
+eregi()
+eregi()函数在由模式指定的字符串中搜索指定的字符串
+，搜索不区分大小写，返回值为true和fasle
+CTF 题做多了就知道 ereg() 函数或 eregi() 函数存在空字符截断漏洞，
+即参数中的正则表达式或待匹配字符串遇到空字符则截断丢弃后面的数据。
+
+php://input 可以访问原始请求数据中的只读流。
+
+substr（"字符串",6,length(这里默认1)）
+将字符串下表为6开始返回输出
+
+php中的@
+不回显后接表达式的错误信息
+
+1.弱比较
+$id=“0xd” 0开头的字符串和整型比较会转化为0
+
+面向对象（->相当于java的.    说白了就是调用）
+$this -> name = $name
+
+self::用来访问本类的属性和方法 
+在类的内部对成员或方法进行访问的
+
+php __wakeup() 函数漏洞分析，测试
+__wekup()函数是在反序列化操作时，unserialize()函数会先检查有没有存在
+一个名为 __wakeup()的函数，如果存在，先执行 __wakeup()
+漏洞利用：当序列化结果（字符串）表示对象属性个数的值 大于 真实个数的属性值时，
+就会跳过 __wakeup() 函数的执行
+
+
+反序列化
+unserialize('O:1:"A":0:{}');
+翻译：类，长度1，字符串为A
+0表示类的{}，参数个数
+
+preg_match() — 执行匹配正则表达式
+
+三目，三元
+$a ?? 0 等同于 isset($a) ? $a : 0。
+$a ?: 0 等同于 $a ? $a : 0。
+
+$a??$b;
+$a是不是null，如果不为null，则返回$a，否则返回$b
+
+
+eval() 
+函数把字符串按照 PHP 代码来计算。
+
+PHP Filter 简介
+PHP 过滤器用于对来自非安全来源的数据
+（比如用户输入）进行验证和过滤。
+
+foreach 语法结构提供了遍历数组的简单方式。
+
+show_source(filename,return)
+函数对文件进行语法高亮显示。
+
+strstr()
+查找字符串的首次出现,并返回字符串的剩余部分，区分大小写
+stristr()
+查找字符串的首次出现,并返回字符串的剩余部分，不区分大小写
+strpos()
+查找字符串是否出现
+
+&&（and）、||（or）、xor（亦或）、！（非）
+
+is_numeric
+用于检测变量是否为数字或数字字符串。
+
+intval() 函数用于获取变量的整数值。
+ntval函数有个特性:”直到遇上数字或正负符号才开始做转换，
+再遇到非数字或字符串结束时(\0)结束转换”,
+在某些应用程序里由于对intval函数这个特性认识不够,
+错误的使用导致绕过一些安全判断导致安全漏洞
+
+intval() 函数通过使用指定的进制 base 转换（默认是十进制），
+返回变量 var 的 integer 数值。
+intval() 不能用于 object，
+否则会产生 E_NOTICE 错误并返回 1。
+
+file_put_contents(file,data,mode,context)
+将一个字符串写入文件
+
+file_get_contents() 
+把整个文件读入一个字符串中。
+
+
+弱类型
+=== 在进行比较的时候，会先判断两种字符串的类型是否相等，再比较
+== 在进行比较的时候，会先将字符串类型转化成相同，再比较
+https://www.cnblogs.com/Mrsm1th/p/6745532.html
+
+
+__construct 当一个对象创建时被调用
+__destruct 当一个对象销毁时被调用
+__toString 当一个对象被当作一个字符串使用
+__sleep 在对象被序列化之前运行
+__wakeup 在对象被反序列化之后被调用
+
+
+count_chars(string,mode)
+函数返回字符串所用字符的信息
+例如，ASCII 字符在字符串中出现的次数，或者某个字符是否已经在字符串中使用过
+
+strtolower("str") 
+函数把字符串转换为小写。
+
+scandir(templates) 函数
+print_r(scandir("."));  // 全部
+列出指定目录中的文件和目录
+
+highlight_file("");
+show_source("");
+
+/uploaded/backup/
+glob() 函数
+返回匹配指定模式的文件名或目录。
+
+
+php执行外部命令函数
+exec()、passthru()、system()、shell_exec()
+
+exec()
+exec执行command命令，
+但是不会输出全部结果，
+而是返回结果的最后一行，
+如果你想得到全部的结果，
+可以使用第二个参数，让其输出到一个数组，
+数组的每一个记录代表了输出的每一行
+尽量：
+exec('ls /home/xyw/test',$arr);  
+print_r($arr);
+
+
+passthru()
+直接将结果输出，不返回结果，不用使用echo查看结果。
+passthru("ls test");  
+
+system()
+与passthru的基本相同，但是system返回结果并且输出。
+
+shell_exec()
+是反撇号 (`) 操作符的变体.0
+
+preg_replace (正则表达式, 替换成, 字符串, 最大替换次数【默认-1，无数次】, 替换次数)
+
+escapeshellcmd
+对字符串中可能会欺骗 shell 命令执行任意命令的字符进行转义
+反斜线（\）会在以下字符之前插入： 
+&#;`|*?~<>^()[]{}$\, \x0A 和 \xFF。 ' 和 " 仅在不配对儿的时候被转义。 
+在 Windows 平台上，所有这些字符以及 % 和 ! 字符都会被空格代替。
+
+escapeshellarg
+把字符串转码为可以在 shell 命令里使用的参数
+将给字符串增加一个单引号并且能引用或者转码任何已经存在的单引号，
+这样以确保能够直接将一个字符串传入 shell 函数，
+并且还是确保安全的。
+
+preg_replace 函数执行一个正则表达式的搜索和替换
+使用了 /e 模式，导致可以代码执行
+preg_replace 函数在匹配到符号正则的字符串时，会将替换字符串当做代码来执行
+$_GET as $re => $str
+相当于get到的参数赋给$re,变量赋给$str
+在PHP中，对于传入的非法的 $_GET 数组参数名，
+会将其转换成下划线，这就导致我们正则匹配失效。
+当非法字符为首字母时，只有点号会被替换成下划线
+https://xz.aliyun.com/t/2557
+
+call_user_func 
+ 把第一个参数作为回调函数调用,其余参数是回调函数的参数。
+
+
+implode()
+把数组元素组合为字符串
+
+unset()
+函数用于销毁给定的变量
+
+extract()
+从数组中将变量导入到当前的符号表
+
+assert — 检查一个断言是否为 false
+assert(mixed $assertion, Throwable $exception = ?): bool
+如果 assertion 是字符串，它将会被 assert() 当做 PHP 代码来执行。
+
+file_exists(string $filename): bool
+检查文件或目录是否存在
+
+strrev() 函数
+反转字符串
+
+str_rot13() 函数对字符串执行 ROT13 编码。
+str_rot13()解释ROT13解码
+
+strcmp() 函数
+比较两个字符串
+返回值：	
+本函数返回：
+
+0 - 如果两个字符串相等
+<0 - 如果 string1 小于 string2
+>0 - 如果 string1 大于 string2
+
+
+ctype_alpha()
+判断是否全为字母
+正为true
+反之false
+
+
+is_array() 函数用于检测变量是否是一个数组
+
+
+is_file() 函数检查指定的文件名是否是正常的文件。
+如果文件存在且为正常的文件，则返回 true。
+
+unlink() 函数删除文件。
+若成功，则返回 true，失败则返回 false。
+
+empty() 函数用于检查一个变量是否为空
+
+fread() 函数读取打开的文件。常用组合：
+<?php
+$file = fopen("test.txt","r");
+$contents = fread($file,"10");
+fclose($file);
+?>
+
+end() 
+函数将内部指针指向数组中的最后一个元素，并输出。
+
+explode()
+函数把字符串打散为数组。
+
+file_exists() 函数检查文件或目录是否存在。
+
+mysql_fetch_array()
+函数从结果集中取得一行作为关联数组，或数字数组，或二者兼有
+返回根据从结果集取得的行生成的数组，如果没有更多行则返回 false。
+
+tempnam() 
+函数在指定的目录中创建一个具有唯一文件名的临时文件。
+该函数返回新的临时文件名，如果失败则返回 FALSE。
+
+move_uploaded_file() 函数将上传的文件移动到新位置。
+
+floatval() 、doubleval ()这两函数同个东西，函数用于获取变量的浮点值。
+$var = '122.34343runoob';
+floatval ($var) == 122.34343
+返回值：返回给定变量的浮点值。空数组返回0，非空数组返回1。

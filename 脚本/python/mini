@@ -1,0 +1,810 @@
+#  <center> 小程序开发</center>
+
+
+
+- [小程序下载与资源](#小程序下载与资源)
+- [小程序注册](#小程序注册)
+- [常用技能](#常用技能)
+- [框架分析](#框架分析)
+- [组件](#组件)
+- [页面的生命周期](#页面的生命周期)
+- [创建新页面](#创建新页面)
+- [页面编译(预览)](#页面编译预览)
+- [tabBar](#tabbar)
+- [盒子模型](#盒子模型)
+- [flex布局](#flex布局)
+- [简讯样式](#简讯样式)
+- [前端样式库WeUI](#前端样式库weui)
+- [WeUI组件](#weui组件)
+- [常用wxss样式（类似css）](#常用wxss样式类似css)
+- [js基础](#js基础)
+- [js数据类型](#js数据类型)
+- [this关键字](#this关键字)
+- [数据绑定](#数据绑定)
+- [input输入绑定](#input输入绑定)
+- [导航跳转](#导航跳转)
+- [模板的使用](#模板的使用)
+- [数据库](#数据库)
+- [获取数据](#获取数据)
+- [更新数据update](#更新数据update)
+- [删除数据remove](#删除数据remove)
+- [分页](#分页)
+- [捕捉错误](#捕捉错误)
+- [云存储](#云存储)
+- [富文本编辑器](#富文本编辑器)
+- [正则提取摘要的方法](#正则提取摘要的方法)
+- [rich-text中图片自适应大小](#rich-text中图片自适应大小)
+- [本地存储](#本地存储)
+
+
+
+## 小程序下载与资源
+[开发文档 ｜](https://developers.weixin.qq.com/miniprogram/dev/framework/)
+[开发者工具 |](https://developers.weixin.qq.com/miniprogram/dev/devtools/download.html)
+[前端weui ｜](https://weui.io)
+[我师网源码 |](https://github.com/lemooljiang/woshiwang-miniprogram)
+[视频](https://www.youtube.com/user/qiupengyuan/videos)
+
+## 小程序注册
+[注册地址](https://mp.weixin.qq.com)
+
+注册为个人用户，获取AppID(小程序ID，在开发管理的功能中)，在“添加开发者”中由管理员将同一小组成员设为开发者。
+appid： wxxxxxxxxxxxx
+
+## 常用技能
+1. 创建一个新页面：app.json -> pages -> "pages/newPage/newPage"
+2. 输入命令的头几个字母，使用tab键可以智能补全。
+3. 设置颜色时可以先设 red, 然后鼠标放上面时会弹出选色框，再修改即可。
+4. 渲染指定页面，在开发者工具上部的“添加编译模式”-> 启动页面"pages/reader/reader"。
+5. ./ 表示当前目录  ../ 表示上一级目录  / 表示根目录
+
+## 框架分析
+![示意图](https://steemjiang.com:8081/ipfs/Qmd1SLRK4mES3GB943G9szaoaAPnc1B4VJz1bffWQWy3rK)
+
+1. json 
+app.json 是当前小程序的全局配置，包括了小程序的所有页面路径、界面表现、网络超时时间、底部 tab 等。
+page.json 用来表示单个页面相关的配置
+2. WXML 模板
+描述当前页面的结构
+3. WXSS 样式
+WXSS 具有 CSS 大部分的特性，规定页面的格式、字体大小、颜色等。
+4. JS 逻辑交互
+页面逻辑交互，处理用户的操作等。
+
+## 组件
+由一个个组件来构成页面的样式，好比房子的地基、墙体、门、窗等。
+常用的组件是 view、 text、 image、 video、 map
+
+输入时：view，然后按 tab, 会智能补全代码。
+```
+<text>这是文本</text>
+
+<view> hello world! </view>
+
+<image src="https://res.wx.qq.com/wxdoc/dist/assets/img/0.4cb08bb4.jpg"></image>
+
+<icon class="icon-box-img" type="success" size="93"></icon>
+<icon class="icon-box-img" type="warn" size="93" color="#C9C9C9"></icon>
+
+<input class="weui-input" auto-focus placeholder="请输入"/>
+```
+
+## 页面的生命周期
+页面从产生到销毁的过程，主要是生命周期函数(钩子函数)，是自动调用的。
+
+onLoad: 页面加载,一个页面只会调用一次，常用于获取调用的query参数、数据库访问。
+eg:
+```js
+onLoad: function (options) {
+  console.log(1, "onload, 加载数据")
+},
+```
+
+onShow: 页面显示,每次打开页面都会调用一次。
+onReady: 页面初次渲染完成,一个页面只会调用一次，代表页面已经准备妥当，可以和视图层进行交互。
+对界面的设置如wx.setNavigationBarTitle请在onReady之后设置。详见生命周期
+onHide: 页面隐藏,当navigateTo或底部tab切换时调用。
+onUnload: 页面卸载,当redirectTo或navigateBack的时候调用。
+
+## 创建新页面
+```
+//app.json -> pages中按如下输入，即可创建新页面，
+包含四个页面文件,例如：hello.js, hello.json, hello.wxml, hello.wxss
+"pages": [
+    "pages/hello/hello"
+  ],
+
+方面二： 也可通过文件夹命令 pages 创建，不过不推荐这种办法。 
+```
+
+## 页面编译(预览)
+```
+直接`ctrl + s`可以直接编译默认首页或是指定页面。
+
+指定编译页面，是通过上方菜单栏中普通编译-> 添加编译模式 -> 启动页面 pages/hello/hello
+```
+
+## tabBar
+[全局配置](https://developers.weixin.qq.com/miniprogram/dev/reference/configuration/app.html)
+
+可以通过 tabBar 配置项切换显示不同的对应页面。
+
+app.json中配置（框架-> 配置），最少两个，最多五个
+
+图片使用png格式，背景透明，81px * 81px
+背影色：#f7f7fa，图标色：选中时"#ff6600"，没选中时#999999
+```json
+"tabBar": {
+    "selectedColor":"#ff6600",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "text": "首页",
+        "iconPath": "images/logo2.png",
+        "selectedIconPath": "images/logo.png"
+      },
+      {
+        "pagePath": "pages/courses/courses",
+        "text": "课程",
+        "iconPath": "images/logo2.png",
+        "selectedIconPath": "images/logo.png"
+      }] }
+```
+
+## 盒子模型
+在页面中布局可以看成是在一个空间中摆放一个个盒子，每一个元素可以看成是在一个盒子内，层层叠放和层套。
+
+![盒子示意图](https://steemjiang.com:8081/ipfs/QmUuZKuKQgXKT8bnptomdmFdLWyzYFXcTNruAfB5ZYM53s)
+
+在盒子布局的最外层还有一层“page”，可以对它做一些全局的设局。
+page{
+ background-color: red;
+}
+
+![margin.jpg](https://steemjiang.com:8081/ipfs/QmRYLa6ByVtA9aGQLPA3Etfqx3yGHL7uiTDTriZBud865F)
+
+
+盒子外边距是margin, 内边距padding，有四种定义方法(以margin为例,padding类似)：
+```
+margin: 25rpx;  //上下左右边距都是25rpx
+margin: 25rpx 15rpx; //上下边距是25rpx, 左右边距是15rpx
+margin: 25rpx 15rpx 10rpx 5rpx;  //顺时针定义，上边距是25rpx 右边距是15rpx，下边距是10rpx，左边距是5rpx
+margin-top: 25rpx;  //还有margin-right, margin-bottom, margin-left
+```
+
+## flex布局
+[flex布局](https://www.cnblogs.com/dragondean/p/5922740.html)
+```css
+display:flex;
+flex-direction: row;    //水平
+justify-content: center; //水平中心对齐
+flex-direction: column  //竖直
+align-items:center; //竖直单行对齐
+align-content:center; //竖直多行对齐
+margin:0 auto;          //子容器在父容器中居中,可用于图片居中
+
+两端对齐
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+```
+
+## 简讯样式
+小程度开课啦  2021.4.17
+《微信小程序开发与设计》已在链课上推出。
+链课：https://moochain.net
+```css
+.news{
+   font-size: 19px;
+   border-bottom: 1px solid rgb(36, 28, 28);
+   /* background-color: red; */
+   margin: 20rpx 20rpx;
+   padding-bottom: 5rpx;
+}
+
+.news-title{
+   font-size: 17px;
+   color: rgb(196, 173, 48);
+   padding-bottom: 15rpx;
+   margin-bottom: 15rpx;
+   border-bottom: 1px solid rgb(133, 131, 131);
+}
+```
+
+## 前端样式库WeUI
+使用方法一(直接使用样式)：
+[前端样式参考weui |](https://weui.io)
+[github](https://github.com/Tencent/weui-wxss)
+
+1. 复制`weui.wxss`(style中,WeUI v1.1)到项目根目录中(app.wxss同级目录)
+2. app.wxss引用weui.wxss(全局引用)：
+   /**app.wxss**/
+   @import "weui.wxss";
+3. 当前页面使用，拷贝对应的wxml、wxss和js文件。   
+  
+
+使用方法二(以组件的形式)：
+```js
+1. app.json中注册
+    "useExtendedLib": {
+       "weui": true
+     },
+2. app.wxss引用weui.wxss(全局引用)
+   /**app.wxss**/
+   @import "weui.wxss";    
+3. 当前页面注册(例如test.json)
+   "usingComponents": {
+    "mp-dialog": "weui-miniprogram/dialog/dialog",
+    "mp-cells": "weui-miniprogram/cells/cells",
+    "mp-cell": "weui-miniprogram/cell/cell",
+    "mp-badge": "weui-miniprogram/badge/badge"
+  }
+4. 当前页面使用
+ <mp-cell link>
+    <view style="display: inline-block; vertical-align: middle">单行列表</view>
+    <mp-badge content="8" style="margin-left: 5px;"/>
+</mp-cell> 
+```
+
+## WeUI组件
+1. weui.io上找到相应的组件样式。
+2. 查找`weui--wxcss -> example`中的组件包，每个文件都包含对应的wxml、wxss和js文件，把它们拷贝到相应的位置。
+3. 对样式进行修改。可以直接在原有的基础上增加新样式，比如`class="page__title title2"`
+
+
+## 常用wxss样式（类似css）
+WXSS主要控制页面的样式，比如页面的布局，字体大小、颜色、阴影等。
+
+[文档 |](https://developers.weixin.qq.com/miniprogram/dev/framework/view/wxss.html)
+[css文档 |](https://www.w3school.com.cn/css/index.asp)
+[HTML5基础语法规范](https://ke.qq.com/course/363142?taid=2701856552094342&tuin=1dacdcdf)
+
+单位：盒子用rpx, 文字用px单位。
+
+字体属性
+```css
+字体大小：一级标题19px ，二级标题17px。（其中文本15px，可以在app.wxss中统一设置）
+font-size: 15px;         //字体大小
+line-height: 22px;       //行间距
+color: rgb(66, 66, 66);  //字体颜色
+font-family: 微软雅黑，宋体； //一般就用默认字体
+text-align: center;   //文本居中
+text-shadow: 2px 2px 5px red; //阴影
+```
+
+图片属性
+```css
+设计图大小为：750*1334 px(12.7*22.6cm  300dpi)
+mode='widthFix' 宽度占满，高度自动变化，保持原图宽高比不变
+<image src='' mode='widthFix'></image>
+image{
+  display:flex;
+  width: 100%;
+  margin: 0 auto;  //盒子居中
+}
+```
+
+盒子属性
+```css
+width: 200rpx;
+height: 150rpx; 
+background-color: aqua; //背景色
+border: 1px solid red; //边框, border-bottem
+border-radius: 25rpx; //圆角
+box-shadow: 2px 2px 5px red; //阴影
+margin: 20rpx 20rpx;  //外边距
+padding-bottom: 5rpx; //内边距
+margin: 0 auto;  //盒子居中
+```
+
+## js基础
+[教程 |](https://wangdoc.com/javascript)
+[ES6](http://es6.ruanyifeng.com/#README)
+
+JavaScript(简称js),是一种动态类型语言，已发展成全栈的语言：既可以做前端，又可以做编程，还可以做服务器。
+小程序中js主要起到前端样式、数据绑定以及连接数据库的作用。
+
+```js
+//变量，JavaScript 也就是说，变量的类型没有限制，变量可以随时更改类型。
+var a = 1 + 3;
+
+let a = 4   //es6 新版写法，语句后可以无分号
+const VALUE = 30
+
+//函数是一段可以反复调用的代码块。函数还能接受输入的参数，不同的参数会返回不同的值。
+function print(s) {
+  console.log(s)
+}
+
+//箭头函数，es6 新版写法
+let print = (s) => {
+  console.log(s)
+}
+```
+
+## js数据类型
+1. 数值（number）：整数和小数（比如1和3.14）
+2. 字符串（string）：文本（比如Hello World）。
+3. 布尔值（boolean）：表示真伪的两个特殊值，即true（真）和false（假）
+4. undefined：表示“未定义”或不存在，即由于目前没有定义，所以此处暂时没有任何值
+5. null：表示空值，即此处的值为空。
+6. 对象（object）：对象就是一组“键值对”（key-value）的集合，是一种无序的复合数据集合。
+  对象是最复杂的数据类型，又可以分成三个子类型。
+    6.1 狭义的对象（object）
+    6.2 数组（array）
+    6.3 函数（function）
+    ```
+    eg:
+    var obj = {
+      foo: 'Hello',
+      bar: 'World'
+    };
+
+    var obj = {
+      p: 123,
+      m: function () { ... },
+    }
+    ```
+
+有三种方法，可以确定一个值到底是什么类型。
+  typeof运算符
+  instanceof运算符
+  Object.prototype.toString方法
+
+## this关键字
+this就是属性或方法“当前”所在的对象。
+函数都是在某个对象之中运行，this就是函数运行时所在的对象（环境）。
+函数f在全局环境执行，this.x指向全局环境的x；在obj环境执行，this.x指向obj.x。
+```js
+var person = {
+  name: '张三',
+  describe: function () {
+    return '姓名：'+ this.name;
+  }
+};
+```
+
+## 数据绑定
+```js
+作用：使后台的数据显示到前端，这也是js的主要功能
+数据绑定 ，列表渲染，条件渲染，模板引用
+
+1. 数据绑定
+<text>{{message}}</text>
+
+//js 直接赋值
+date:{message:“hello world！”}
+
+或者是使用this.setData赋值：从数据库读取然后展示
+  onLoad: function (options) {
+    //(onLoad是页面自动加载的，里面的函数会自动调用)
+    this.setData({
+      title: 'Set some data for updating view.'
+   })
+   //this.data.title = 'Set some data for updating view.'
+ },
+
+2. 点击事件
+<view bindtap="viewTap">点击</view>
+
+//js
+Page({
+  viewTap() {
+    console.log('view tap')
+  }
+})
+
+3. 列表重复渲染
+<block wx:for="{{news}}" wx:for-item="item" wx:key="index">
+  <view class='news-item'>
+        <view>{{index}}:{{item.name}}</view>
+  </view>
+</block>
+  简写：
+  <view wx:for="{{news}}">
+    {{ item.name }}
+  </view>
+
+.js
+data:{
+  news: [
+      { name: "商品1" },
+      { name: "商品2"}
+    ]
+}
+
+eg:
+列表重复嵌套渲染（有两层以上循环）
+ <block wx:for="{{video}}" wx:for-item="item" xw:key="index">
+     <view class='chaptertitle'>{{item.chapter}}</view>
+            <view class='video'>
+            <block wx:for="{{video[index].section}}" wx:for-item="item" xw:key="index">
+                <view class='chapter'>
+                    {{item.name}}
+                  </view>
+                </view>
+            </block>
+     </view>
+</block>
+//js
+  onLoad: function (options) {
+    let db = wx.cloud.database();
+    db.collection("course").where({
+      title: options.title
+    }).get().then(res => {
+      console.log(778, res);
+      this.setData({
+        course:res.data[0],
+        video: res.data[0].video
+        });
+      console.log(779, res.data[0].video)
+    })
+  },
+```
+
+## input输入绑定
+```js
+eg1:
+<input bindinput="accountInput" placeholder="用户名/邮箱/手机号"/>
+//js
+accountInput:function(e){
+  let content = e.detail.value
+  console.log(content)
+},
+
+//数据双向绑定
+<input model:value="{{title}}" placeholder="标题"/>
+<textarea model:value="{{body}}" placeholder="内容" auto-height/>
+
+eg2:
+<input bindblur="pwdBlur" placeholder="请输入密码" password />
+//js
+pwdBlur:function(e){
+  let password = e.detail.value
+  if(password != ''){
+    this.setData({password:password})
+  }
+}
+```	
+
+## 导航跳转
+```js
+第一种方法
+<navigator url="../detail/detail">跳转页面</navigator>
+//注意：不能跳转到tabBar索引的页面
+//路径的另一种写法：url="/pages/detail/detail"   
+// ./ 表示当前目录  ../ 表示上一级目录  / 表示根目录
+
+第二种方法
+使用点击事件，bindtap会出现冒泡，用catchtap可阻止冒泡事件
+<view bindtap="clickA">点击</view>
+//js
+Page({
+  clickA: function() {
+    wx.navigateTo({//跳转到普通页面，父页面隐藏              
+      url: '../detail/detail'
+    })
+  },
+
+    wx.redirectTo({
+      url: '../detail/detail'  ////跳转到普通页面，父页面关闭  
+    })
+
+  clickA: function () {
+    wx.switchTab({ //跳转到tab页面
+      url: '../reader/reader'
+    })
+  },
+})
+
+如果要传递参数，比如id
+<navigator url="../courses-detail/courses-detail?id=1">
+    <view class='course-title'>photoshop研习社</view>
+</navigator>
+在对应的页面（courses-detail）js中接受在onLoad 的options中:
+onLoad: function (options) {
+    this.setData({
+      id:options['id'] //或者option.id
+    })
+  },
+
+也可以使用点击函数传递参数(id)
+<view bindtap='changePost' data-id='2'>这一篇</view>
+//js
+  changePost: function (event) {
+    var id = event.currentTarget.dataset.id;
+    wx.navigateTo({
+      url: '../detail/detail?id=' + id
+    });
+    console.log(666, event.currentTarget.dataset.id)
+  },
+```
+
+## 模板的使用
+代码复用率较高的部分可以制成模板，重复使用。
+```js
+1、创建文件夹（template）,创建文件course_template.wxml，将重复的代码拷贝过去。
+<template name="course">
+   <view class='course-item'>
+          <view class='course-text'>
+          <view class='course-title'>{{title}}</view> 
+          <view>老师：{{teacher}}</view>
+         </view>
+  </view>
+ </template>
+2、在需要使用的地方引用即可。需要注意的是数据的传递（item）。
+<import src='../../template/course_template.wxml'/>
+   <block wx:for="{{courses}}" wx:for-item="item" xw:key="index">
+       <template is="course" data="{{...item}}" />
+   </block>
+```
+
+## 数据库
+[文档](https://developers.weixin.qq.com/miniprogram/dev/wxcloud/guide/database.html)
+
+云开发提供了一个 JSON 数据库(类似MongoDB)。数据库中的每条记录都是一个 JSON 格式的对象。一个数据库可以有多个集合（相当于关系型数据中的表），集合可看做一个 JSON 数组，数组中的每个对象就是一条记录，记录的格式是 JSON 对象。
+
+云开发数据库提供以下几种数据类型：
+String：字符串
+Number：数字
+Object：对象
+Array：数组
+Bool：布尔值
+Date：时间
+Geo：多种地理位置类型，详见下
+Null
+
+```js
+1. app.js中初始化
+  // env 参数说明：
+  //   env 参数决定接下来小程序发起的云开发调用（wx.cloud.xxx）会默认请求到哪个云环境的资源
+  //   此处请填入环境 ID, 环境 ID 可打开云控制台查看
+  //   如不填则使用默认环境（第一个创建的环境）
+wx.cloud.init({
+  env: 'cloud1-9g4bawpxa3c661ec',
+  traceUser: true,
+})
+
+2. 手动创建集合collection: "test1"
+
+3. 增加数据 Promise 风格
+let db = wx.cloud.database();
+db.collection('test1').add({
+  // data 字段表示需新增的 JSON 数据
+  data: {
+    title:"小程序开课啦",
+    time:"2021.3.12",
+    section1:"微信小程序开发与设计已在链课上推出。",
+    section2:" 链课： https://moochain.net",   
+    id:"008"
+  }
+})
+.then(res => {
+  console.log(123, res)
+})
+
+//回调的写法
+addData(){
+  let db = wx.cloud.database();
+  db.collection('test1').add({
+    data:{
+      name: "c#",
+      time: "2019",
+      long: "325648"
+    },success(res){console.log(111,res);},
+    fail(err){console.log(222,err);},
+    complete(res){console.log(333,res);}
+  });
+  },
+
+//async-await写法 推荐写法
+addData: async function(){
+  let db = wx.cloud.database()
+  let res = await db.collection('test1').add({
+      data: {
+        title:"小程序开课啦",
+        time:"2021.3.12",
+        section1:"微信小程序开发与设计已在链课上推出。",
+        section2:" 链课： https://moochain.net",   
+        id:"008"
+      }
+    })
+  console.log(567, res)
+},
+```
+
+## 获取数据
+```js
+getData: async function(){
+  let db = wx.cloud.database()
+  let res = await db.collection("test1").get() //整个集合
+  console.log(68, res)
+ },
+
+
+//查询数据 where( ) 获取一条数据，赋值如： title:res.data[0].title
+let res = await db.collection("test1").where({title:"不错不错"}).get()
+
+db.collection("course").where({age:_.gt(30)}).get()
+
+查询数据排序
+orderBy('id', 'asc')    升序排列
+orderBy('id', 'desc')   降序排列
+await db.collection('dbtest').orderBy('createTime','desc').get();
+
+db.collection('articles')
+  .aggregate()
+  .sort({
+      age: -1,
+      score: -1
+  })
+  .end()
+ 
+查询数据限制 limit()
+let res = await db.collection("test1").limit(2).get() //只查前2条数据
+```
+
+## 更新数据update
+```js
+let db = wx.cloud.database()
+let res = await db.collection('test1').doc('b00064a760a4741a189326627972808d').update({
+    // data 传入需要局部更新的数据
+    data: {
+      // 表示更新title字段
+      title: "我无怨无悔"
+    }
+  })
+console.log(633, res)  
+```
+
+## 删除数据remove
+```js
+let db = wx.cloud.database()
+let res = await db.collection('test1').doc('b00064a760a4741a189326627972808d').remove()
+console.log(633, res)  
+
+//删除多条
+db.collection('todos').where({
+  done: true
+}).remove()
+```
+
+## 分页
+[长列表渲染优化](https://zhuanlan.zhihu.com/p/146791824)
+```js
+const cloud = require('wx-server-sdk')
+cloud.init()
+const db = cloud.database()
+const MAX_LIMIT = 100
+exports.main = async (event, context) => {
+  // 先取出集合记录总数
+  const countResult = await db.collection('todos').count()
+  const total = countResult.total
+  // 计算需分几次取
+  const batchTimes = Math.ceil(total / 100)
+  // 承载所有读操作的 promise 的数组
+  const tasks = []
+  for (let i = 0; i < batchTimes; i++) {
+    const promise = db.collection('todos').skip(i * MAX_LIMIT).limit(MAX_LIMIT).get()
+    tasks.push(promise)
+  }
+  // 等待所有
+  return (await Promise.all(tasks)).reduce((acc, cur) => {
+    return {
+      data: acc.data.concat(cur.data),
+      errMsg: acc.errMsg,
+    }
+  })
+}
+```
+
+## 捕捉错误
+```js
+如果可能会有错误发生，可以使用try... catch来捕捉错误
+try{
+    let res = await db.collection('test1').doc('b00064a760a4741a189326627972808d').remove()
+    console.log(6233, res) 
+}catch(e){
+    console.error(11, e)
+}
+```
+
+## 云存储
+[手册](https://developers.weixin.qq.com/miniprogram/dev/wxcloud/guide/storage.html)
+
+云存储提供高可用、高稳定、强安全的云端存储服务，支持任意数量和形式的非结构化数据存储，如视频和图片，并在控制台进行可视化管理。
+```js
+//上传图片
+uploadImage: async function(){
+  //第一步，选择图片
+  let res = await wx.chooseImage({
+      count: 1,
+      sizeType: ['original', 'compressed'],
+      sourceType: ['album', 'camera']
+  })
+  console.log(11, res)
+  //第二步，上传到云端
+  let res2 = await wx.cloud.uploadFile({
+      filePath: res.tempFilePaths[0], // 小程序临时文件路径
+      cloudPath:'images/'+new Date().getTime() 
+      // 上传至云端的路径
+      //new Date().getTime() 获取当前时间戳
+    })
+  console.log(22, res2)
+  //第三步，展示在前端
+  this.setData({
+    imgURL:res2.fileID
+  })
+}
+```
+
+## 富文本编辑器
+1. rich-text组件包导入components
+2. 在相应的json中注册，
+ "usingComponents": {
+    "rich-text": "/components/rich-text/rich-text"
+  }
+3. 在wxml中使用，
+  <rich-text bind:get_content="get_content"></rich-text> 
+4. 在js中获取值，
+   get_content: function(e){
+      console.log(88, e.detail.html)      
+   },
+
+//展示 ，注意此处的rich-text是原生组件，不用导入包。
+<rich-text nodes="{{content}}"></rich-text>
+
+
+## 正则提取摘要的方法
+[正则表达解析Markdown语法](https://juejin.im/post/5c80c51fe51d453bbb04ecc6)
+```js
+abstractFn(res){
+  if(!res){
+    return ''
+  }else{
+    let str=res.replace(/(\*\*|__)(.*?)(\*\*|__)/g,'')          //全局匹配内粗体
+            .replace(/\!\[[\s\S]*?\]\([\s\S]*?\)/g,'')           //全局匹配图片
+            .replace(/\([\s\S]*?\)/g,'')                         //全局匹配连接
+            .replace(/<\/?.+?\/?>/g,'')                          //全局匹配内html标签
+            .replace(/(\*)(.*?)(\*)/g,'')                        //全局匹配内联代码块
+            .replace(/`{1,2}[^`](.*?)`{1,2}/g,'')                //全局匹配内联代码块
+            .replace(/```([\s\S]*?)```[\s]*/g,'')                //全局匹配代码块
+            .replace(/\~\~(.*?)\~\~/g,'')                        //全局匹配删除线
+            .replace(/[\s]*[-\*\+]+(.*)/g,'')                    //全局匹配无序列表
+            .replace(/[\s]*[0-9]+\.(.*)/g,'')                    //全局匹配有序列表
+            .replace(/(#+)(.*)/g,'')                             //全局匹配标题
+            .replace(/(>+)(.*)/g,'')                             //全局匹配摘要
+            .replace(/\r\n/g,"")                                 //全局匹配换行
+            .replace(/\n/g,"")                                   //全局匹配换行
+            .replace(/\s/g,"")                                   //全局匹配空字符;
+    return str.slice(0,180)
+  }
+}
+```
+
+## rich-text中图片自适应大小
+rich-text中的图片中没有属性的，在显示时会变得很大，超出显示的范围。需要使用正则对其更改。
+```js
+res.data[0].content = res.data[0].content.replace(/\<img/gi, '<img style="width:100%;height:auto" ')
+```
+
+## 本地存储
+将数据存储在本地缓存中指定的 key 中。会覆盖掉原来该 key 对应的内容。除非用户主动删除或因存储空间原因被系统清理，否则数据都一直可用。单个 key 允许存储的最大数据长度为 1MB，所有数据存储上限为 10MB。
+
+```js
+wx.setStorage({
+  key:"key",
+  data:"value"
+})
+try {
+  wx.setStorageSync('key', 'value')
+} catch (e) { }
+
+wx.getStorage({
+  key: 'key',
+  success (res) {
+    console.log(res.data)
+  }
+})
+```

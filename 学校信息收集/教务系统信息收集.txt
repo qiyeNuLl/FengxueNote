@@ -1,0 +1,28 @@
+10.0.22.17
+http://jwgl.thxy.cn/
+
+http://10.0.22.17/login!doLogin.action    显示服务器错误、Internal Server Error
+
+
+robots.txt
+User-agent: * 
+Disallow: / 
+
+
+简单的目录爆破，会被拉黑，每次复原有时间间隔，似乎时间会越来越久
+
+
+
+
+学校主页（java、jq）
+https://www.gzist.edu.cn/?gkfrom=card
+https://www.gzist.edu.cn/%3f/
+https://www.gzist.edu.cn
+
+
+邮箱登录是什么鬼
+http://mail.gzist.edu.cn/
+
+管理员登录
+http://mail.gzist.edu.cn/admin.jsp
+

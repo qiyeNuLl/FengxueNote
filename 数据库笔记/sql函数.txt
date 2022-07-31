@@ -1,0 +1,18 @@
+MID() 函数
+SELECT MID(column_name,start[,length]) FROM table_name
+用于从文本字段中提取字符。
+
+^
+异或运算
+1^1 为true
+
+https://www.jianshu.com/p/4a084ea1c7d4
+
+schema_auto_increment_columns  #只有表自增的表才在里面，可能会漏掉一些
+sys.schema_table_statistics_with_buffer
+sys.x$schema_table_statistics_with_buffer
+
+sys.innodb_buffer_stats_by_schema
+sys.innodb_buffer_stats_by_table
+mysql.innodb_table_stats
+sys.schema_tables_with_full_table_scans

